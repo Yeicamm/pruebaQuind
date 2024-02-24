@@ -1,4 +1,34 @@
 package com.technical.test.quind.hexagonal.infrastructure.adapter.exepcion;
 
-public class ProductException {
+import org.springframework.http.HttpStatus;
+
+public class ProductException extends RuntimeException{
+    private static final long serialVersionUID = 1L;
+
+    private HttpStatus errorCode;
+    private String errorMessage;
+
+    public ProductException(HttpStatus errorCode, String errorMessage) {
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+    }
+
+    public ProductException() {
+    }
+
+    public HttpStatus getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(HttpStatus errorCode) {
+        this.errorCode = errorCode;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
 }
