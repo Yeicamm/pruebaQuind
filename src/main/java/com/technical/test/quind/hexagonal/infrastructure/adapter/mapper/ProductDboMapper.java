@@ -1,6 +1,7 @@
 package com.technical.test.quind.hexagonal.infrastructure.adapter.mapper;
 
 import com.technical.test.quind.hexagonal.domain.model.Product;
+import com.technical.test.quind.hexagonal.domain.model.dto.ProductDto;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ProductEntity;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;

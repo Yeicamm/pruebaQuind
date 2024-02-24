@@ -1,8 +1,8 @@
-package com.technical.test.quind.hexagonal.domain.port;
+package com.technical.test.quind.hexagonal.application.usecases;
 
 import com.technical.test.quind.hexagonal.domain.model.dto.ClientDto;
 
-public interface ClientPersistencePort {
+public interface ClientService {
     Object createClient(ClientDto clientDto);
 
     Object updateClient(String identificationNumber, ClientDto clientDto);

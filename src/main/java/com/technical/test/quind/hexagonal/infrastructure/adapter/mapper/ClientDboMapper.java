@@ -1,6 +1,7 @@
 package com.technical.test.quind.hexagonal.infrastructure.adapter.mapper;
 
 import com.technical.test.quind.hexagonal.domain.model.Client;
+import com.technical.test.quind.hexagonal.domain.model.dto.ClientDto;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ClientEntity;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
