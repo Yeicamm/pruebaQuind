@@ -21,6 +21,4 @@ public interface ProductDboMapper {
     @InheritInverseConfiguration
     Product toDomain(ProductEntity productEntity);
 
-
-
 }
