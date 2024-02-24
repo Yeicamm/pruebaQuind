@@ -1,4 +1,4 @@
-package com.prueba.quind;
+package com.technical.test.quind.hexagonal;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
