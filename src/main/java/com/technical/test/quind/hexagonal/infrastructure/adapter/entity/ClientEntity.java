@@ -17,7 +17,6 @@ public class ClientEntity extends Audit{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "identification_type")
     private IdentificationTypeEnum identificationTypeEnum;

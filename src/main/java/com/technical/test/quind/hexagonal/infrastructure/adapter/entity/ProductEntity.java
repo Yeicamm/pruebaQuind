@@ -2,16 +2,16 @@ package com.technical.test.quind.hexagonal.infrastructure.adapter.entity;
 
 import com.technical.test.quind.hexagonal.domain.model.enums.AccountState;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
 @Table (name = "product")
-@Data
+@Getter
+@Setter
+@Inheritance(strategy = InheritanceType.JOINED)
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductEntity extends Audit{
