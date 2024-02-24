@@ -7,5 +7,5 @@ public interface ClientService {
 
     Object updateClient(String identificationNumber, ClientDto clientDto);
 
-    void deleteClient(Long identificationNumber);
+    String deleteClient(String identificationNumber);
 }

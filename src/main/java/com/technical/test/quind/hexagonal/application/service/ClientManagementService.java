@@ -1,0 +1,85 @@
+package com.technical.test.quind.hexagonal.application.service;
+
+import com.technical.test.quind.hexagonal.application.mapper.ClientMapper;
+import com.technical.test.quind.hexagonal.application.usecases.ClientService;
+import com.technical.test.quind.hexagonal.domain.model.constant.MessageAplication;
+import com.technical.test.quind.hexagonal.domain.model.dto.ClientDto;
+import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ClientEntity;
+import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.ClientRepository;
+import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.util.Optional;
+
+@RequiredArgsConstructor
+public class ClientManagementService implements ClientService {
+
+
+    private final ClientRepository clientRepository;
+    private final ClientMapper clientMapper;
+
+
+
+    @Override
+    public Object createClient(ClientDto clientDto) {
+        Boolean ageValid = validateAgeClient(clientDto.getDateOfBirth());
+        if (!ageValid){
+            return MessageAplication.NOMINORS;
+        }
+
+        clientDto.setDateCreated(LocalDateTime.now());
+        clientDto.setDateModified(null);
+        ClientEntity saveInformation = clientMapper.toDbo(clientDto);
+        return clientRepository.save(saveInformation);
+    }
+
+    @Override
+    public Object updateClient(String identificationNumber, ClientDto clientDto) {
+        if (!(clientDto.getDateOfBirth().isEmpty())){
+            Boolean ageValid = validateAgeClient(clientDto.getDateOfBirth());
+            if (!ageValid){
+                return MessageAplication.NOMINORS;
+            }
+        }
+        return getFindClientEntity(clientDto);
+    }
+
+    @Override
+    public String deleteClient(String identificationNumber) {
+        Optional<ClientEntity> clientEntity = clientRepository.findClientEntityByIdentificationNumber(identificationNumber);
+        if (clientEntity.isPresent()) {
+            if (clientEntity.get().getProductEntities().isEmpty()) {
+                clientRepository.deleteById(clientEntity.get().getId());
+                return MessageAplication.DELETECLIENT;
+            }
+            return MessageAplication.DELETECLIENTERROR;
+        }
+
+        return MessageAplication.CLIENTNOTFOUND;
+    }
+
+    private Boolean validateAgeClient(String dateOfBirth) {
+        LocalDate dateNac = LocalDate.parse(dateOfBirth);
+        LocalDate now = LocalDate.now();
+        Period period = Period.between(dateNac, now);
+        int age = period.getYears();
+        int ageMinimum = 18;
+        return age >= ageMinimum;
+    }
+    public Object getFindClientEntity(ClientDto clientDto){
+        Optional<ClientEntity> existingClientEntity = clientRepository.findClientEntityByIdentificationNumber(clientDto.getIdentificationNumber());
+        if (existingClientEntity.isPresent()){
+            existingClientEntity.get().setIdentificationTypeEnum(clientDto.getIdentificationTypeEnum());
+            existingClientEntity.get().setIdentificationNumber(clientDto.getIdentificationNumber());
+            existingClientEntity.get().setClientName(clientDto.getClientName());
+            existingClientEntity.get().setClientSurname(clientDto.getClientSurname());
+            existingClientEntity.get().setClientEmail(clientDto.getClientEmail());
+            existingClientEntity.get().setDateOfBirth(clientDto.getDateOfBirth());
+            existingClientEntity.get().setDateModified(LocalDateTime.now());
+            return clientRepository.save(existingClientEntity.get());
+        }
+        return MessageAplication.NULL;
+    }
+}
