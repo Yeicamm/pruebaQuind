@@ -1,27 +1,23 @@
 package com.technical.test.quind.hexagonal.application.mapper;
 
-import com.technical.test.quind.hexagonal.domain.model.Account;
-import com.technical.test.quind.hexagonal.domain.model.Client;
 import com.technical.test.quind.hexagonal.domain.model.dto.ClientDto;
-import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.AccountEntity;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ClientEntity;
-import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring")
+import java.time.LocalDateTime;
 
-public interface ClientMapper {
-    @Mapping(source = "id", target = "id")
-    @Mapping(source = "identificationTypeEnum", target = "identificationTypeEnum")
-    @Mapping(source = "identificationNumber", target = "identificationNumber")
-    @Mapping(source = "clientName", target = "clientName")
-    @Mapping(source = "clientSurname", target = "clientSurname")
-    @Mapping(source = "clientEmail", target = "clientEmail")
-    @Mapping(source = "dateOfBirth", target = "dateOfBirth")
-    @Mapping(source = "productEntities", target = "productEntities")
-    ClientEntity toDbo(ClientDto domain);
-
-    @InheritInverseConfiguration
-    Account toDomain(AccountEntity accountEntity);
+@Component
+public class ClientMapper {
+    public static ClientEntity dtoToClientEntity(ClientDto clientDTO) {
+        ClientEntity clientEntity = new ClientEntity();
+        clientEntity.setIdentificationTypeEnum(clientDTO.getIdentificationTypeEnum());
+        clientEntity.setIdentificationNumber(clientDTO.getIdentificationNumber());
+        clientEntity.setClientName(clientDTO.getClientName());
+        clientEntity.setClientSurname(clientDTO.getClientSurname());
+        clientEntity.setClientEmail(clientDTO.getClientEmail());
+        clientEntity.setDateOfBirth(clientDTO.getDateOfBirth());
+        clientEntity.setDateCreated(LocalDateTime.now());
+        clientEntity.setDateModified(null);
+        return clientEntity;
+    }
 }

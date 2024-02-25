@@ -3,14 +3,17 @@ package com.technical.test.quind.hexagonal.infrastructure.rest.controller;
 import com.technical.test.quind.hexagonal.application.usecases.ClientService;
 import com.technical.test.quind.hexagonal.domain.model.constant.MessageAplication;
 import com.technical.test.quind.hexagonal.domain.model.dto.ClientDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/cliente")
+@RequestMapping("/api/v1/client")
+@RequiredArgsConstructor
 public class ClientController {
-    @Autowired
-    private ClientService clientService;
+
+
+    private final ClientService clientService;
 
 
     @PostMapping("/create")

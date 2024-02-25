@@ -7,6 +7,7 @@ import com.technical.test.quind.hexagonal.domain.model.dto.ClientDto;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ClientEntity;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,24 +15,18 @@ import java.time.Period;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Service
 public class ClientManagementService implements ClientService {
-
-
     private final ClientRepository clientRepository;
-    private final ClientMapper clientMapper;
-
-
-
     @Override
     public Object createClient(ClientDto clientDto) {
         Boolean ageValid = validateAgeClient(clientDto.getDateOfBirth());
         if (!ageValid){
             return MessageAplication.NOMINORS;
         }
-
         clientDto.setDateCreated(LocalDateTime.now());
         clientDto.setDateModified(null);
-        ClientEntity saveInformation = clientMapper.toDbo(clientDto);
+        ClientEntity saveInformation = ClientMapper.dtoToClientEntity(clientDto);
         return clientRepository.save(saveInformation);
     }
 
