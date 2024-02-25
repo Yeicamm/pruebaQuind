@@ -108,4 +108,27 @@ public class ProductManagementServiceTest {
         Mockito.when(productRepository.findProductEntityByAccountNumber(editAccountStatusDto.getAccountNumber())).thenReturn(Optional.empty());
         productManagementService.accountCanceled(editAccountStatusDto);
     }
+    @Test
+    void consignMoneyNegative(){
+        var accountNumber = "5300000001";
+        var balance = BigDecimal.valueOf(-53);
+        productManagementService.consignMoney(accountNumber,balance);
+    }
+    @Test
+    void consignMoneyIsEmpty(){
+        var accountNumber = "";
+        var balance = BigDecimal.valueOf(1000);
+        Mockito.when(productRepository.findProductEntityByAccountNumber(accountNumber)).thenReturn(Optional.empty());
+        productManagementService.consignMoney(accountNumber,balance);
+    }
+    @Test
+    void consignMoney(){
+        var accountNumber = "5300000001";
+        var balance = BigDecimal.valueOf(1000);
+        ProductEntity product = new ProductEntity();
+        product.setAccountNumber(accountNumber);
+        product.setBalance(balance);
+        Mockito.when(productRepository.findProductEntityByAccountNumber(accountNumber)).thenReturn(Optional.of(product));
+        productManagementService.consignMoney(accountNumber,balance);
+    }
 }
