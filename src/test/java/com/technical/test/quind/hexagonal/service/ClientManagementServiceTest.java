@@ -63,4 +63,20 @@ public class ClientManagementServiceTest {
         Mockito.when(clienteRepository.save(any(ClientEntity.class))).thenReturn(clientEntity);
         clientService.updateClient(clientDto.getIdentificationNumber(), clientDto);
     }
+    @Test
+    void updateClientMinor() {
+        ClientDto clientDto = ClientDto.builder()
+                .identificationNumber("1000381834")
+                .dateOfBirth("2021-09-03")
+                .build();
+        clientService.updateClient(clientDto.getIdentificationNumber(),clientDto);
+    }
+    @Test
+    void updateBirthDayEmpty() {
+        ClientDto clientDto = ClientDto.builder()
+                .identificationNumber("1000381834")
+                .dateOfBirth("")
+                .build();
+        clientService.updateClient(clientDto.getIdentificationNumber(),clientDto);
+    }
 }
