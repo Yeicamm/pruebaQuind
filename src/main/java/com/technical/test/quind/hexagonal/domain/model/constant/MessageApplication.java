@@ -1,9 +1,9 @@
 package com.technical.test.quind.hexagonal.domain.model.constant;
 
-public class MessageAplication {
-    public static String DELETECLIENTERROR= "No se puede eliminar el cliente porque tiene productos vinculados.";
-    public static String DELETECLIENT = "Customer information successfully deleted";
-    public static String BALANCECANNOTLESS0 = "El saldo de una cuenta de ahorros no puede ser menor a $0.";
+public class MessageApplication {
+    public static String DELETECLIENTERROR= "You can't delete the customer because it has linked products.";
+    public static String DELETECLIENT = "Customer information successfully deleted.";
+    public static String BALANCECANNOT = "A savings account balance cannot be less than $0.";
     public static String ACCOUNTNOTFOUND = "Account Not Found";
     public static String CLIENTNOTFOUND = "No se encontro el cliente a eliminar";
     public static String CANCELLED  = "Unable to cancel the account";

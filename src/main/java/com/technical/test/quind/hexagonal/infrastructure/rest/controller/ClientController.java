@@ -1,10 +1,9 @@
 package com.technical.test.quind.hexagonal.infrastructure.rest.controller;
 
 import com.technical.test.quind.hexagonal.application.usecases.ClientService;
-import com.technical.test.quind.hexagonal.domain.model.constant.MessageAplication;
+import com.technical.test.quind.hexagonal.domain.model.constant.MessageApplication;
 import com.technical.test.quind.hexagonal.domain.model.dto.ClientDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,9 +19,9 @@ public class ClientController {
     public String createClient(@RequestBody ClientDto clientDto){
         try {
             clientService.createClient(clientDto);
-            return MessageAplication.ACCOUNTCREATED;
+            return MessageApplication.ACCOUNTCREATED;
         } catch (Exception e) {
-            return MessageAplication.CANCELLED;
+            return MessageApplication.CANCELLED;
         }
     }
 
@@ -30,11 +29,11 @@ public class ClientController {
     public String updateClient(@PathVariable String identificationNumber, @RequestBody ClientDto clientDto){
         try {
             clientService.updateClient(identificationNumber, clientDto);
-            return MessageAplication.UPDATEACCOUNTS;
+            return MessageApplication.UPDATEACCOUNTS;
         } catch (IllegalArgumentException e) {
-            return MessageAplication.ACCOUNTNOTFOUND;
+            return MessageApplication.ACCOUNTNOTFOUND;
         } catch (Exception e) {
-            return MessageAplication.ACCOUNTCANCELLED;
+            return MessageApplication.ACCOUNTCANCELLED;
         }
     }
 
@@ -42,11 +41,11 @@ public class ClientController {
     public String deleteClient(@PathVariable String identificationNumber){
         try {
             clientService.deleteClient(identificationNumber);
-            return MessageAplication.ACCOUNTCANCELLED;
+            return MessageApplication.ACCOUNTCANCELLED;
         } catch (IllegalArgumentException e) {
-            return MessageAplication.ACCOUNTNOTFOUND;
+            return MessageApplication.ACCOUNTNOTFOUND;
         } catch (Exception e) {
-            return MessageAplication.ACCOUNTCANCELLED;
+            return MessageApplication.ACCOUNTCANCELLED;
         }
     }
 }

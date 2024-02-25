@@ -2,7 +2,7 @@ package com.technical.test.quind.hexagonal.application.service;
 
 import com.technical.test.quind.hexagonal.application.mapper.ClientMapper;
 import com.technical.test.quind.hexagonal.application.usecases.ClientService;
-import com.technical.test.quind.hexagonal.domain.model.constant.MessageAplication;
+import com.technical.test.quind.hexagonal.domain.model.constant.MessageApplication;
 import com.technical.test.quind.hexagonal.domain.model.dto.ClientDto;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ClientEntity;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.ClientRepository;
@@ -21,40 +21,37 @@ public class ClientManagementService implements ClientService {
     @Override
     public Object createClient(ClientDto clientDto) {
         Boolean ageValid = validateAgeClient(clientDto.getDateOfBirth());
-        if (!ageValid){
-            return MessageAplication.NOMINORS;
+        if (!ageValid) {
+            return MessageApplication.NOMINORS;
         }
         clientDto.setDateCreated(LocalDateTime.now());
         clientDto.setDateModified(null);
         ClientEntity saveInformation = ClientMapper.dtoToClientEntity(clientDto);
         return clientRepository.save(saveInformation);
     }
-
     @Override
     public Object updateClient(String identificationNumber, ClientDto clientDto) {
         if (!(clientDto.getDateOfBirth().isEmpty())){
             Boolean ageValid = validateAgeClient(clientDto.getDateOfBirth());
             if (!ageValid){
-                return MessageAplication.NOMINORS;
+                return MessageApplication.NOMINORS;
             }
         }
         return getFindClientEntity(clientDto);
     }
-
     @Override
     public String deleteClient(String identificationNumber) {
         Optional<ClientEntity> clientEntity = clientRepository.findClientEntityByIdentificationNumber(identificationNumber);
         if (clientEntity.isPresent()) {
             if (clientEntity.get().getProductEntities().isEmpty()) {
                 clientRepository.deleteById(clientEntity.get().getId());
-                return MessageAplication.DELETECLIENT;
+                return MessageApplication.DELETECLIENT;
             }
-            return MessageAplication.DELETECLIENTERROR;
+            return MessageApplication.DELETECLIENTERROR;
         }
 
-        return MessageAplication.CLIENTNOTFOUND;
+        return MessageApplication.CLIENTNOTFOUND;
     }
-
     private Boolean validateAgeClient(String dateOfBirth) {
         LocalDate dateNac = LocalDate.parse(dateOfBirth);
         LocalDate now = LocalDate.now();
@@ -75,6 +72,6 @@ public class ClientManagementService implements ClientService {
             existingClientEntity.get().setDateModified(LocalDateTime.now());
             return clientRepository.save(existingClientEntity.get());
         }
-        return MessageAplication.NULL;
+        return MessageApplication.NULL;
     }
 }
