@@ -56,8 +56,8 @@ public class ClientManagementService implements ClientService {
         LocalDate dateNac = LocalDate.parse(dateOfBirth);
         LocalDate now = LocalDate.now();
         Period period = Period.between(dateNac, now);
-        int age = period.getYears();
-        int ageMinimum = 18;
+        var age = period.getYears();
+        var ageMinimum = 18;
         return age >= ageMinimum;
     }
     public Object getFindClientEntity(ClientDto clientDto){

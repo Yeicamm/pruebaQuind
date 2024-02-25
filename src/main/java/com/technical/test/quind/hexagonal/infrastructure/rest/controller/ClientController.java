@@ -21,7 +21,7 @@ public class ClientController {
             clientService.createClient(clientDto);
             return MessageApplication.ACCOUNTCREATED;
         } catch (Exception e) {
-            return MessageApplication.CANCELLED;
+            return MessageApplication.UNABLECANCELLED;
         }
     }
 
