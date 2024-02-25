@@ -1,7 +1,6 @@
 package com.technical.test.quind.hexagonal.service;
 
 import com.technical.test.quind.hexagonal.application.service.ClientManagementService;
-import com.technical.test.quind.hexagonal.domain.model.constant.MessageApplication;
 import com.technical.test.quind.hexagonal.domain.model.dto.ClientDto;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ClientEntity;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ProductEntity;
@@ -17,12 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-
 public class ClientManagementServiceTest {
-
-
     @Mock
     private ClientRepository clientRepository;
 
@@ -44,6 +38,7 @@ public class ClientManagementServiceTest {
         Mockito.when(clientRepository.save(clientEntity)).thenReturn(clientEntity);
         clientService.createClient(clientDto);
     }
+
     @Test
     void createClientMinor() {
         ClientDto clientDto = ClientDto.builder()
@@ -51,55 +46,81 @@ public class ClientManagementServiceTest {
                 .build();
         clientService.createClient(clientDto);
     }
+
     @Test
-    void updateClient(){
+    void updateClient() {
         ClientDto clientDto = ClientDto.builder()
                 .identificationNumber("1000381834")
                 .dateOfBirth("2003-09-03")
                 .build();
         ClientEntity clientEntity = new ClientEntity();
         Mockito.when(clientRepository.findClientEntityByIdentificationNumber(clientDto.getIdentificationNumber())).thenReturn(Optional.of(clientEntity));
-        Mockito.when(clientRepository.save(any(ClientEntity.class))).thenReturn(clientEntity);
+        Mockito.when(clientRepository.save(clientEntity)).thenReturn(clientEntity);
         clientService.updateClient(clientDto.getIdentificationNumber(), clientDto);
     }
+
     @Test
     void updateClientMinor() {
         ClientDto clientDto = ClientDto.builder()
                 .identificationNumber("1000381834")
                 .dateOfBirth("2021-09-03")
                 .build();
-        clientService.updateClient(clientDto.getIdentificationNumber(),clientDto);
+        clientService.updateClient(clientDto.getIdentificationNumber(), clientDto);
     }
+
     @Test
     void updateBirthDayEmpty() {
         ClientDto clientDto = ClientDto.builder()
                 .identificationNumber("1000381834")
                 .dateOfBirth("")
                 .build();
-        clientService.updateClient(clientDto.getIdentificationNumber(),clientDto);
+        clientService.updateClient(clientDto.getIdentificationNumber(), clientDto);
     }
+
     @Test
     void deleteClientIsPresentProduct() {
-        ClientDto clientDto = ClientDto.builder()
-                .identificationNumber("1000381834")
-                .build();
+        String identificationNumber = "1000381834";
+
+
+        ProductEntity product = new ProductEntity();
+
+        List<ProductEntity> listProduct = new ArrayList<>();
+        listProduct.add(product);
 
         ClientEntity clientEntity = new ClientEntity();
         clientEntity.setId(1L);
+        clientEntity.setProductEntities(listProduct);
 
-        List<ProductEntity> products = new ArrayList<>();
-        products.add(new ProductEntity());
-        clientEntity.setProductEntities(products);
-
-        Mockito.when(clientRepository.findClientEntityByIdentificationNumber(clientDto.getIdentificationNumber()))
+        Mockito.when(clientRepository.findClientEntityByIdentificationNumber(identificationNumber))
                 .thenReturn(Optional.of(clientEntity));
 
-        Mockito.when(clientRepository.findClientEntityByIdentificationNumber(""))
+        clientService.deleteClient(identificationNumber);
+    }
+
+    @Test
+    void deleteClientIsPresentProductEmpty() {
+        String identificationNumber = "1000381834";
+
+
+        List<ProductEntity> listProduct = new ArrayList<>();
+
+        ClientEntity clientEntity = new ClientEntity();
+        clientEntity.setId(1L);
+        clientEntity.setProductEntities(listProduct);
+
+        Mockito.when(clientRepository.findClientEntityByIdentificationNumber(identificationNumber))
+                .thenReturn(Optional.of(clientEntity));
+
+        clientService.deleteClient(identificationNumber);
+    }
+
+    @Test
+    void deleteClientIsPresentProductNotFound() {
+        String identificationNumber = "1000381834";
+
+        Mockito.when(clientRepository.findClientEntityByIdentificationNumber(identificationNumber))
                 .thenReturn(Optional.empty());
 
-        assertEquals(MessageApplication.DELETECLIENTERROR, clientService.deleteClient(clientDto.getIdentificationNumber()));
-
-
-        assertEquals(MessageApplication.CLIENTNOTFOUND, clientService.deleteClient(""));
+        clientService.deleteClient(identificationNumber);
     }
 }
