@@ -80,4 +80,32 @@ public class ProductManagementServiceTest {
         Mockito.when(productRepository.findProductEntityByAccountNumber(editAccountStatusDto.getAccountNumber())).thenReturn(Optional.of(product));
         productManagementService.accountStateUpdate(editAccountStatusDto);
     }
+    @Test
+    void accountCanceledIsPresent(){
+        EditAccountStatusDto editAccountStatusDto = EditAccountStatusDto.builder()
+                .accountNumber("5312345678")
+                .build();
+        ProductEntity product = new ProductEntity();
+        product.setBalance(BigDecimal.valueOf(1));
+        Mockito.when(productRepository.findProductEntityByAccountNumber(editAccountStatusDto.getAccountNumber())).thenReturn(Optional.of(product));
+        productManagementService.accountCanceled(editAccountStatusDto);
+    }
+    @Test
+    void accountCanceledIsPresentCompareTo(){
+        EditAccountStatusDto editAccountStatusDto = EditAccountStatusDto.builder()
+                .accountNumber("5312345678")
+                .build();
+        ProductEntity product = new ProductEntity();
+        product.setBalance(BigDecimal.valueOf(0));
+        Mockito.when(productRepository.findProductEntityByAccountNumber(editAccountStatusDto.getAccountNumber())).thenReturn(Optional.of(product));
+        productManagementService.accountCanceled(editAccountStatusDto);
+    }
+    @Test
+    void accountCanceledNotFound(){
+        EditAccountStatusDto editAccountStatusDto = EditAccountStatusDto.builder()
+                .accountNumber("530000000")
+                .build();
+        Mockito.when(productRepository.findProductEntityByAccountNumber(editAccountStatusDto.getAccountNumber())).thenReturn(Optional.empty());
+        productManagementService.accountCanceled(editAccountStatusDto);
+    }
 }
