@@ -4,6 +4,7 @@ import com.technical.test.quind.hexagonal.application.mapper.ProductMapper;
 import com.technical.test.quind.hexagonal.domain.model.constant.MessageApplication;
 import com.technical.test.quind.hexagonal.domain.model.dto.ProductDto;
 import com.technical.test.quind.hexagonal.domain.model.enums.AccountState;
+import com.technical.test.quind.hexagonal.domain.model.enums.AccountType;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ProductEntity;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +50,7 @@ public class AccountManagementService {
         productDto.setAccountNumber(generateNumberAccountRandom("53"));
         productDto.setAccountState(AccountState.ACTIVE);
         productDto.setDateCreated(LocalDateTime.now());
+        productDto.setAccountTypes(AccountType.SAVINGS);
         productRepository.save(product);
     }
 
@@ -58,6 +60,7 @@ public class AccountManagementService {
         productDto.setAccountNumber(generateNumberAccountRandom("33"));
         productDto.setAccountState(productDto.getAccountState());
         productDto.setAccountState(AccountState.ACTIVE);
+        productDto.setAccountTypes(AccountType.CURRENT);
         productDto.setDateCreated(LocalDateTime.now());
 
         ProductEntity product = ProductMapper.dtoToProductEntity(productDto);

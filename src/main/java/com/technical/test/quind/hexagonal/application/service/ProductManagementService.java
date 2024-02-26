@@ -7,6 +7,7 @@ import com.technical.test.quind.hexagonal.domain.model.dto.ProductDto;
 import com.technical.test.quind.hexagonal.domain.model.enums.AccountState;
 import com.technical.test.quind.hexagonal.domain.model.enums.AccountType;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ProductEntity;
+import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.ClientRepository;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,22 +21,25 @@ import java.util.Optional;
 public class ProductManagementService implements ProductService {
     private final ProductRepository productRepository;
     private final AccountManagementService accountManagementService;
+    private final ClientRepository clientRepository;
 
     public Object accountCreate(ProductDto productDto) {
         productDto.setAccountNumber(null);
         String accountNumber;
+        if (clientRepository.existsById(productDto.getClientId())){
+            if (productDto.getAccountType().equals(AccountType.SAVINGS.name())) {
+                accountNumber = accountManagementService.generateNumberAccountRandom("53");
+                productDto.setAccountNumber(accountNumber);
+                return accountManagementService.createSavingsAccount(productDto);
 
-        if (productDto.getAccountType().equals(AccountType.SAVINGS.name())) {
-            accountNumber = accountManagementService.generateNumberAccountRandom("53");
-            productDto.setAccountNumber(accountNumber);
-            return accountManagementService.createSavingsAccount(productDto);
-
-        } else if (productDto.getAccountType().equals(AccountType.CURRENT.name())) {
-            accountNumber = accountManagementService.generateNumberAccountRandom("33");
-            productDto.setAccountNumber(accountNumber);
-            return accountManagementService.createCurrentAccount(productDto);
+            } else if (productDto.getAccountType().equals(AccountType.CURRENT.name())) {
+                accountNumber = accountManagementService.generateNumberAccountRandom("33");
+                productDto.setAccountNumber(accountNumber);
+                return accountManagementService.createCurrentAccount(productDto);
+            }
+            return MessageApplication.ACCOUNT_MUST_TYPE_SAVINGS_CURRENT;
         }
-        return MessageApplication.CANNOTCREATEDIFFERENTACCOUNT;
+        return MessageApplication.VALIDATION_CLIENT_PRODUCT;
     }
 
     @Override

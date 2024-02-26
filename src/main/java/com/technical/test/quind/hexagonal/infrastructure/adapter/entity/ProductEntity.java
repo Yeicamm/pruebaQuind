@@ -1,6 +1,7 @@
 package com.technical.test.quind.hexagonal.infrastructure.adapter.entity;
 
 import com.technical.test.quind.hexagonal.domain.model.enums.AccountState;
+import com.technical.test.quind.hexagonal.domain.model.enums.AccountType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,9 @@ public class ProductEntity extends Audit{
     @Enumerated(EnumType.STRING)
     @Column(name = "account_state")
     private AccountState accountState;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "account_type")
+    private AccountType accountType;
     @Column(name = "account_balance")
     private BigDecimal balance;
     @Column(name = "GMF_exempt")

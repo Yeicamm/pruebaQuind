@@ -1,6 +1,7 @@
 package com.technical.test.quind.hexagonal.domain.model.dto;
 
 import com.technical.test.quind.hexagonal.domain.model.enums.AccountState;
+import com.technical.test.quind.hexagonal.domain.model.enums.AccountType;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.Audit;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,4 +19,5 @@ public class ProductDto extends Audit {
     private BigDecimal balance;
     private boolean gmfExempt;
     private Long clientId;
+    private AccountType accountTypes;
 }
