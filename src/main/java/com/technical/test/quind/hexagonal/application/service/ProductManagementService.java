@@ -26,20 +26,22 @@ public class ProductManagementService implements ProductService {
     public Object accountCreate(ProductDto productDto) {
         productDto.setAccountNumber(null);
         String accountNumber;
-        if (clientRepository.existsById(productDto.getClientId())){
-            if (productDto.getAccountType().equals(AccountType.SAVINGS.name())) {
-                accountNumber = accountManagementService.generateNumberAccountRandom("53");
-                productDto.setAccountNumber(accountNumber);
-                return accountManagementService.createSavingsAccount(productDto);
-
-            } else if (productDto.getAccountType().equals(AccountType.CURRENT.name())) {
-                accountNumber = accountManagementService.generateNumberAccountRandom("33");
-                productDto.setAccountNumber(accountNumber);
-                return accountManagementService.createCurrentAccount(productDto);
+        if (productDto.getBalance().compareTo(BigDecimal.ZERO) >= 0){
+            if (clientRepository.existsById(productDto.getClientId())){
+                if (productDto.getAccountType().equals(AccountType.SAVINGS.name())) {
+                    accountNumber = accountManagementService.generateNumberAccountRandom("53");
+                    productDto.setAccountNumber(accountNumber);
+                    return accountManagementService.createSavingsAccount(productDto);
+                } else if (productDto.getAccountType().equals(AccountType.CURRENT.name())) {
+                    accountNumber = accountManagementService.generateNumberAccountRandom("33");
+                    productDto.setAccountNumber(accountNumber);
+                    return accountManagementService.createCurrentAccount(productDto);
+                }
+                return MessageApplication.ACCOUNT_MUST_TYPE_SAVINGS_CURRENT;
             }
-            return MessageApplication.ACCOUNT_MUST_TYPE_SAVINGS_CURRENT;
+            return MessageApplication.VALIDATION_CLIENT_PRODUCT;
         }
-        return MessageApplication.VALIDATION_CLIENT_PRODUCT;
+        return MessageApplication.VALUE_ACCOUNT_GREATER_TO_ZERO;
     }
 
     @Override
@@ -56,7 +58,6 @@ public class ProductManagementService implements ProductService {
 
     @Override
     public Object accountCanceled(EditAccountStatusDto editAccountStatusDto) {
-        var balanceCompare = 0;
         Optional<ProductEntity> productEntity = productRepository.findProductEntityByAccountNumber(editAccountStatusDto.getAccountNumber());
         if (productEntity.isPresent()) {
             if (productEntity.get().getBalance().equals(BigDecimal.ZERO)) {
