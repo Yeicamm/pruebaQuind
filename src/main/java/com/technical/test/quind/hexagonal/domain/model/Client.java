@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 public class Client extends Audit {
     private Long id;
-    private IdentificationTypeEnum identificationTypeEnum;
+    private String identificationTypeEnum;
     private String identificationNumber;
     private String clientName;
     private String clientSurname;
