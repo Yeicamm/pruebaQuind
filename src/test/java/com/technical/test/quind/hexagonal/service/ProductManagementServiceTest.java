@@ -4,7 +4,10 @@ import com.technical.test.quind.hexagonal.application.service.AccountManagementS
 import com.technical.test.quind.hexagonal.application.service.ProductManagementService;
 import com.technical.test.quind.hexagonal.domain.model.dto.EditAccountStatusDto;
 import com.technical.test.quind.hexagonal.domain.model.dto.ProductDto;
+import com.technical.test.quind.hexagonal.domain.model.enums.AccountState;
+import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ClientEntity;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ProductEntity;
+import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.ClientRepository;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +23,8 @@ public class ProductManagementServiceTest {
     @Mock
     ProductRepository productRepository;
     @Mock
+    ClientRepository clientRepository;
+    @Mock
     private AccountManagementService accountManagementService;
     @InjectMocks
     private ProductManagementService productManagementService;
@@ -31,28 +36,7 @@ public class ProductManagementServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    /**@Test
-    void cannotCreateAccountSavings(){
-        ProductDto requestAccountClientDto = ProductDto.builder()
-                .accountType("")
-                .build();
-        productManagementService.accountCreate(requestAccountClientDto);
 
-    }
-    @Test
-    void createAccountSavings(){
-        ProductDto productDto = ProductDto.builder()
-                .accountType("SAVINGS")
-                .build();
-        productManagementService.accountCreate(productDto);
-    }
-    @Test
-    void createAccountCurrent(){
-        ProductDto requestAccountClientDto = ProductDto.builder()
-                .accountType("CURRENT")
-                .build();
-        productManagementService.accountCreate(requestAccountClientDto);
-    }**/
     @Test
     void accountStateUpdateNotFound(){
         EditAccountStatusDto editAccountStatusDto = EditAccountStatusDto.builder()
@@ -61,16 +45,61 @@ public class ProductManagementServiceTest {
         Mockito.when(productRepository.findProductEntityByAccountNumber(editAccountStatusDto.getAccountNumber())).thenReturn(Optional.empty());
         productManagementService.accountStateUpdate(editAccountStatusDto);
     }
-    /**@Test
-    void accountStateUpdateIsPresent(){
-        EditAccountStatusDto editAccountStatusDto = EditAccountStatusDto.builder()
-                .accountNumber("5312345678")
+    @Test
+    void balanceInvalid(){
+        ProductDto productDto = ProductDto.builder()
+                .balance(BigDecimal.valueOf(-1))
                 .build();
-        ProductEntity product = new ProductEntity();
-        product.setAccountNumber("5312345642");
-        Mockito.when(productRepository.findProductEntityByAccountNumber(editAccountStatusDto.getAccountNumber())).thenReturn(Optional.of(product));
-        productManagementService.accountStateUpdate(editAccountStatusDto);
-    }**/
+        productManagementService.accountCreate(productDto);
+    }
+    @Test
+    void balanceValidSavings(){
+        ClientEntity clientEntity = new ClientEntity();
+        clientEntity.setId(1L);
+        ProductDto productDto = ProductDto.builder()
+                .clientId(clientEntity.getId())
+                .balance(BigDecimal.valueOf(1))
+                .accountType("SAVINGS")
+                .build();
+        Mockito.when(clientRepository.existsById(clientEntity.getId())).thenReturn(true);
+        productManagementService.accountCreate(productDto);
+    }
+    @Test
+    void balanceValidCurrent(){
+        ClientEntity clientEntity = new ClientEntity();
+        clientEntity.setId(1L);
+        ProductDto productDto = ProductDto.builder()
+                .clientId(clientEntity.getId())
+                .balance(BigDecimal.valueOf(1))
+                .accountType("CURRENT")
+                .build();
+        Mockito.when(clientRepository.existsById(clientEntity.getId())).thenReturn(true);
+        productManagementService.accountCreate(productDto);
+    }
+    @Test
+    void accountMust(){
+        ClientEntity clientEntity = new ClientEntity();
+        clientEntity.setId(1L);
+        ProductDto productDto = ProductDto.builder()
+                .clientId(clientEntity.getId())
+                .balance(BigDecimal.valueOf(1))
+                .accountType("a")
+                .build();
+        Mockito.when(clientRepository.existsById(clientEntity.getId())).thenReturn(true);
+        productManagementService.accountCreate(productDto);
+    }
+    @Test
+    void validationClient(){
+        ClientEntity clientEntity = new ClientEntity();
+        clientEntity.setId(1L);
+        ProductDto productDto = ProductDto.builder()
+                .clientId(clientEntity.getId())
+                .balance(BigDecimal.valueOf(1))
+                .accountType("a")
+                .build();
+        Mockito.when(clientRepository.existsById(clientEntity.getId())).thenReturn(false);
+        productManagementService.accountCreate(productDto);
+    }
     @Test
     void accountCanceledIsPresent(){
         EditAccountStatusDto editAccountStatusDto = EditAccountStatusDto.builder()
@@ -148,4 +177,55 @@ public class ProductManagementServiceTest {
     void transferMoney(){
         productManagementService.transferMoney("5300000","53102102",BigDecimal.valueOf(20000));
     }
+
+    @Test
+    void valueBalanceZero(){
+        EditAccountStatusDto editAccountStatusDto = EditAccountStatusDto.builder()
+                .build();
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setBalance(BigDecimal.valueOf(0));
+        productEntity.setAccountNumber("5300000");
+        Mockito.when(productRepository.findProductEntityByAccountNumber(editAccountStatusDto.getAccountNumber())).thenReturn(Optional.of(productEntity));
+        productManagementService.accountStateUpdate(editAccountStatusDto);
+    }
+    @Test
+    void productEntityIsPresent(){
+        EditAccountStatusDto editAccountStatusDto = EditAccountStatusDto.builder()
+                .accountState(AccountState.CANCELLED)
+                .build();
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setBalance(BigDecimal.valueOf(0));
+        productEntity.setAccountNumber("5300000");
+        Mockito.when(productRepository.findProductEntityByAccountNumber(editAccountStatusDto.getAccountNumber())).thenReturn(Optional.of(productEntity));
+        productManagementService.accountStateUpdate(editAccountStatusDto);
+    }
+    @Test
+    void productEntityIsPresentActive(){
+        EditAccountStatusDto editAccountStatusDto = EditAccountStatusDto.builder()
+                .accountState(AccountState.ACTIVE)
+                .build();
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setBalance(BigDecimal.valueOf(1000));
+        productEntity.setAccountNumber("5300000");
+        Mockito.when(productRepository.findProductEntityByAccountNumber(editAccountStatusDto.getAccountNumber())).thenReturn(Optional.of(productEntity));
+        productManagementService.accountStateUpdate(editAccountStatusDto);
+    }
+    @Test
+    void productEntityIsPresentInactive(){
+        EditAccountStatusDto editAccountStatusDto = EditAccountStatusDto.builder()
+                .accountState(AccountState.INACTIVE)
+                .build();
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setBalance(BigDecimal.valueOf(1000));
+        productEntity.setAccountNumber("5300000");
+        Mockito.when(productRepository.findProductEntityByAccountNumber(editAccountStatusDto.getAccountNumber())).thenReturn(Optional.of(productEntity));
+        productManagementService.accountStateUpdate(editAccountStatusDto);
+    }
+    @Test
+    void transferMoneyIfTrue(){
+        Mockito.when(productRepository.existsByAccountNumber("5330000")).thenReturn(true);
+        productManagementService.transferMoney("33000","5330000",BigDecimal.valueOf(5000));
+    }
+
+
 }

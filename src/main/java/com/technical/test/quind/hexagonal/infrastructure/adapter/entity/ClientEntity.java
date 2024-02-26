@@ -19,7 +19,7 @@ public class ClientEntity extends Audit{
     private Long id;
     @Column(name = "identification_type")
     private String identificationTypeEnum;
-    @Column(name = "identification_number")
+    @Column(name = "identification_number", unique = true)
     private String identificationNumber;
     @Column(name = "client_name")
     private String clientName;

@@ -8,14 +8,14 @@ import java.time.LocalDateTime;
 
 @Component
 public class ClientMapper {
-    public static ClientEntity dtoToClientEntity(ClientDto clientDTO) {
+    public static ClientEntity dtoToClientEntity(ClientDto clientDto) {
         ClientEntity clientEntity = new ClientEntity();
-        clientEntity.setIdentificationTypeEnum(clientDTO.getIdentificationTypeEnum());
-        clientEntity.setIdentificationNumber(clientDTO.getIdentificationNumber());
-        clientEntity.setClientName(clientDTO.getClientName());
-        clientEntity.setClientSurname(clientDTO.getClientSurname());
-        clientEntity.setClientEmail(clientDTO.getClientEmail());
-        clientEntity.setDateOfBirth(clientDTO.getDateOfBirth());
+        clientEntity.setIdentificationTypeEnum(clientDto.getIdentificationTypeEnum());
+        clientEntity.setIdentificationNumber(clientDto.getIdentificationNumber());
+        clientEntity.setClientName(clientDto.getClientName());
+        clientEntity.setClientSurname(clientDto.getClientSurname());
+        clientEntity.setClientEmail(clientDto.getClientEmail());
+        clientEntity.setDateOfBirth(clientDto.getDateOfBirth());
         clientEntity.setDateCreated(LocalDateTime.now());
         clientEntity.setDateModified(null);
         return clientEntity;

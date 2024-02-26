@@ -40,6 +40,7 @@ public class ClientManagementService implements ClientService {
     }
     @Override
     public Object updateClient(String identificationNumber, ClientDto clientDto) {
+        Optional<ClientEntity> clientEntity = clientRepository.findClientEntityByIdentificationNumber(identificationNumber);
         if (!(isInvalidUseName(clientDto) || isInvalidUseSurname(clientDto))){
             if (EmailValidator.isValidEmail(clientDto.getClientEmail())){
                 if (!(clientDto.getDateOfBirth().isEmpty())){
@@ -47,8 +48,18 @@ public class ClientManagementService implements ClientService {
                     if (!ageValid){
                         return MessageApplication.NO_MINORS;
                     }
+                    if (clientEntity.isPresent()){
+                        clientEntity.get().setIdentificationTypeEnum(clientDto.getIdentificationTypeEnum());
+                        clientEntity.get().setIdentificationNumber(clientDto.getIdentificationNumber());
+                        clientEntity.get().setClientName(clientDto.getClientName());
+                        clientEntity.get().setClientSurname(clientDto.getClientSurname());
+                        clientEntity.get().setClientEmail(clientDto.getClientEmail());
+                        clientEntity.get().setDateOfBirth(clientDto.getDateOfBirth());
+                        clientEntity.get().setDateModified(LocalDateTime.now());
+                        clientRepository.save(clientEntity.get());
+                        return MessageApplication.CLIENT_UPDATE;
+                    }
                 }
-                return MessageApplication.CLIENT_UPDATE;
             }
             return MessageApplication.STRUCTURE_EMAIL;
         }

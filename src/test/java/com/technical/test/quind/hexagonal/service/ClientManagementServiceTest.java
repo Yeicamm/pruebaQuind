@@ -1,5 +1,6 @@
 package com.technical.test.quind.hexagonal.service;
 
+import com.technical.test.quind.hexagonal.application.mapper.ClientMapper;
 import com.technical.test.quind.hexagonal.application.service.ClientManagementService;
 import com.technical.test.quind.hexagonal.domain.model.dto.ClientDto;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ClientEntity;
@@ -29,98 +30,180 @@ public class ClientManagementServiceTest {
     }
 
     @Test
-    void createClient() {
+    void validationNameCreate(){
         ClientDto clientDto = ClientDto.builder()
-                .dateOfBirth("2000-01-01")
+                .clientName("a")
+                .clientSurname("Rojas")
                 .build();
-
-        ClientEntity clientEntity = new ClientEntity();
-        Mockito.when(clientRepository.save(clientEntity)).thenReturn(clientEntity);
         clientService.createClient(clientDto);
     }
-
     @Test
-    void createClientMinor() {
+    void validationSurnameCreate(){
         ClientDto clientDto = ClientDto.builder()
+                .clientName("Cristian")
+                .clientSurname("a")
+                .build();
+        clientService.createClient(clientDto);
+    }
+    @Test
+    void nameNullCreate(){
+        ClientDto clientDto = ClientDto.builder()
+                .clientName(null)
+                .clientSurname("Rojas")
+                .build();
+        clientService.createClient(clientDto);
+    }
+    @Test
+    void surnameNullCreate(){
+        ClientDto clientDto = ClientDto.builder()
+                .clientName("Cristian")
+                .clientSurname(null)
+                .build();
+        clientService.createClient(clientDto);
+    }
+    @Test
+    void EmailValidatorInvalidCreate(){
+        ClientDto clientDto = ClientDto.builder()
+                .clientName("Cristian")
+                .clientSurname("Rojas")
+                .clientEmail("a")
+                .build();
+        clientService.createClient(clientDto);
+    }
+    @Test
+    void AgeInvalid(){
+        ClientDto clientDto = ClientDto.builder()
+                .clientName("Cristian")
+                .clientSurname("Rojas")
+                .clientEmail("aaaaa@aaaa.com")
                 .dateOfBirth("2020-01-01")
                 .build();
         clientService.createClient(clientDto);
     }
-
     @Test
-    void updateClient() {
+    void createAccount(){
         ClientDto clientDto = ClientDto.builder()
-                .identificationNumber("1000381834")
-                .dateOfBirth("2003-09-03")
+                .clientName("Cristian")
+                .clientSurname("Rojas")
+                .clientEmail("aaaaa@aaaa.com")
+                .dateOfBirth("2000-01-01")
+                .build();
+        ClientEntity saveInformation = ClientMapper.dtoToClientEntity(clientDto);
+        Mockito.when(clientRepository.save(saveInformation)).thenReturn(saveInformation);
+        clientService.createClient(clientDto);
+    }
+    @Test
+    void validationNameUpdate(){
+        ClientDto clientDto = ClientDto.builder()
+                .clientName("a")
+                .clientSurname("Rojas")
+                .build();
+        clientService.updateClient("1000381834",clientDto);
+    }
+    @Test
+    void validationSurnameUpdate(){
+        ClientDto clientDto = ClientDto.builder()
+                .clientName("Cristian")
+                .clientSurname("a")
+                .build();
+        clientService.updateClient("1000381834",clientDto);
+    }
+    @Test
+    void nameNullUpdate(){
+        ClientDto clientDto = ClientDto.builder()
+                .clientName(null)
+                .clientSurname("Rojas")
+                .build();
+        clientService.updateClient("1000381834",clientDto);
+    }
+    @Test
+    void surnameNullUpdate(){
+        ClientDto clientDto = ClientDto.builder()
+                .clientName("Cristian")
+                .clientSurname(null)
+                .build();
+        clientService.updateClient("1000381834",clientDto);
+    }
+    @Test
+    void EmailValidatorInvalidUpdate(){
+        ClientDto clientDto = ClientDto.builder()
+                .clientName("Cristian")
+                .clientSurname("Rojas")
+                .clientEmail("a")
+                .build();
+        clientService.updateClient("1000381834",clientDto);
+    }
+    @Test
+    void ageInvalidUpdate(){
+        ClientDto clientDto = ClientDto.builder()
+                .clientName("Cristian")
+                .clientSurname("Rojas")
+                .clientEmail("aaaaa@aaaa.com")
+                .dateOfBirth("2020-01-01")
+                .build();
+        clientService.updateClient("1000381834",clientDto);
+    }
+    @Test
+    void updateClient(){
+        ClientDto clientDto = ClientDto.builder()
+                .clientName("Cristian")
+                .clientSurname("Rojas")
+                .clientEmail("aaaaa@aaaa.com")
+                .dateOfBirth("2000-01-01")
                 .build();
         ClientEntity clientEntity = new ClientEntity();
-        Mockito.when(clientRepository.findClientEntityByIdentificationNumber(clientDto.getIdentificationNumber())).thenReturn(Optional.of(clientEntity));
-        Mockito.when(clientRepository.save(clientEntity)).thenReturn(clientEntity);
-        clientService.updateClient(clientDto.getIdentificationNumber(), clientDto);
+        clientEntity.setIdentificationNumber("1000381834");
+        Mockito.when(clientRepository.findClientEntityByIdentificationNumber(clientEntity.getIdentificationNumber())).thenReturn(Optional.of(clientEntity));
+        clientService.updateClient("1000381834",clientDto);
     }
-
     @Test
-    void updateClientMinor() {
+    void updateClientIsPresent(){
         ClientDto clientDto = ClientDto.builder()
+                .clientName("Cristian")
+                .clientSurname("Rojas")
+                .clientEmail("aaaaa@aaaa.com")
+                .dateOfBirth("2000-01-01")
                 .identificationNumber("1000381834")
-                .dateOfBirth("2021-09-03")
                 .build();
-        clientService.updateClient(clientDto.getIdentificationNumber(), clientDto);
+        Optional<ClientEntity> clientEntity = clientRepository.findClientEntityByIdentificationNumber(clientDto.getIdentificationNumber());
+        Mockito.when(clientRepository.findClientEntityByIdentificationNumber(clientDto.getIdentificationNumber())).thenReturn(clientEntity);
+        clientService.updateClient("1000381834",clientDto);
     }
-
     @Test
-    void updateBirthDayEmpty() {
+    void birthDayEmpty(){
         ClientDto clientDto = ClientDto.builder()
-                .identificationNumber("1000381834")
+                .clientName("Cristian")
+                .clientSurname("Rojas")
+                .clientEmail("aaaaa@aaaa.com")
                 .dateOfBirth("")
                 .build();
-        clientService.updateClient(clientDto.getIdentificationNumber(), clientDto);
+        clientService.updateClient("1000381834",clientDto);
     }
-
     @Test
-    void deleteClientIsPresentProduct() {
-        String identificationNumber = "1000381834";
-
-
-        ProductEntity product = new ProductEntity();
-
-        List<ProductEntity> listProduct = new ArrayList<>();
-        listProduct.add(product);
-
+    void deleteOptionalIsPresent(){
         ClientEntity clientEntity = new ClientEntity();
-        clientEntity.setId(1L);
-        clientEntity.setProductEntities(listProduct);
-
-        Mockito.when(clientRepository.findClientEntityByIdentificationNumber(identificationNumber))
-                .thenReturn(Optional.of(clientEntity));
-
-        clientService.deleteClient(identificationNumber);
+        Optional<ClientEntity> clientEntity2 = clientRepository.findClientEntityByIdentificationNumber(clientEntity.getIdentificationNumber());
+        clientService.deleteClient("1000381834");
     }
-
     @Test
-    void deleteClientIsPresentProductEmpty() {
-        String identificationNumber = "1000381834";
-
-
-        List<ProductEntity> listProduct = new ArrayList<>();
-
+    void deleteProductEntitiesEmpty(){
         ClientEntity clientEntity = new ClientEntity();
-        clientEntity.setId(1L);
-        clientEntity.setProductEntities(listProduct);
-
-        Mockito.when(clientRepository.findClientEntityByIdentificationNumber(identificationNumber))
-                .thenReturn(Optional.of(clientEntity));
-
-        clientService.deleteClient(identificationNumber);
+        clientEntity.setProductEntities(List.of());
+        clientEntity.setIdentificationNumber("1000381834");
+        Mockito.when(clientRepository.findClientEntityByIdentificationNumber(clientEntity.getIdentificationNumber())).thenReturn(Optional.of(clientEntity));
+        clientService.deleteClient("1000381834");
     }
-
     @Test
-    void deleteClientIsPresentProductNotFound() {
-        String identificationNumber = "1000381834";
-
-        Mockito.when(clientRepository.findClientEntityByIdentificationNumber(identificationNumber))
-                .thenReturn(Optional.empty());
-
-        clientService.deleteClient(identificationNumber);
+    void deleteProductEntitiesNoEmpty(){
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setAccountNumber("53");
+        List<ProductEntity> product = new ArrayList<>();
+        product.add(productEntity);
+        ClientEntity clientEntity = new ClientEntity();
+        clientEntity.setProductEntities(product);
+        clientEntity.setIdentificationNumber("1000381834");
+        Mockito.when(clientRepository.findClientEntityByIdentificationNumber(clientEntity.getIdentificationNumber())).thenReturn(Optional.of(clientEntity));
+        clientService.deleteClient("1000381834");
     }
+
 }
