@@ -7,7 +7,6 @@ public class MessageApplication {
     public static String NOMINORS = "The client no can be minor of age";
     public static String BALANCECANNOT = "A savings account balance cannot be less than $0";
     public static String ACCOUNTCANCELLED = "Account Cancelled";
-    public static String ACCOUNTDELETED = "Deleted account";
     public static String ACCOUNTCREATED = " Account Created";
     public static String ACCOUNTNOTFOUND = "Account Not Found";
     public static String UNABLECANCELLED = "Unable to cancel the account";

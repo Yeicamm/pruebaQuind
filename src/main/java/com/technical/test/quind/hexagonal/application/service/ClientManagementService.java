@@ -23,11 +23,13 @@ public class ClientManagementService implements ClientService {
         Boolean ageValid = validateAgeClient(clientDto.getDateOfBirth());
         if (!ageValid) {
             return MessageApplication.NOMINORS;
+        }else {
+            clientDto.setDateCreated(LocalDateTime.now());
+            clientDto.setDateModified(null);
+            ClientEntity saveInformation = ClientMapper.dtoToClientEntity(clientDto);
+            clientRepository.save(saveInformation);
+            return MessageApplication.ACCOUNTCREATED;
         }
-        clientDto.setDateCreated(LocalDateTime.now());
-        clientDto.setDateModified(null);
-        ClientEntity saveInformation = ClientMapper.dtoToClientEntity(clientDto);
-        return clientRepository.save(saveInformation);
     }
     @Override
     public Object updateClient(String identificationNumber, ClientDto clientDto) {
@@ -49,7 +51,6 @@ public class ClientManagementService implements ClientService {
             }
             return MessageApplication.DELETECLIENTERROR;
         }
-
         return MessageApplication.CLIENTNOTFOUND;
     }
     private Boolean validateAgeClient(String dateOfBirth) {

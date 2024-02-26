@@ -57,6 +57,7 @@ public class AccountManagementService {
 
         productDto.setAccountNumber(generateNumberAccountRandom("33"));
         productDto.setAccountState(productDto.getAccountState());
+        productDto.setAccountState(AccountState.ACTIVE);
         productDto.setDateCreated(LocalDateTime.now());
 
         ProductEntity product = ProductMapper.dtoToProductEntity(productDto);

@@ -14,15 +14,9 @@ public class ClientController {
 
     private final ClientService clientService;
 
-
     @PostMapping("/create")
-    public String createClient(@RequestBody ClientDto clientDto){
-        try {
-            clientService.createClient(clientDto);
-            return MessageApplication.ACCOUNTCREATED;
-        } catch (Exception e) {
-            return MessageApplication.UNABLECANCELLED;
-        }
+    public Object createClient(@RequestBody ClientDto clientDto){
+        return clientService.createClient(clientDto);
     }
 
     @PatchMapping("/update/{identificationNumber}")
@@ -41,7 +35,7 @@ public class ClientController {
     public String deleteClient(@PathVariable String identificationNumber){
         try {
             clientService.deleteClient(identificationNumber);
-            return MessageApplication.ACCOUNTCANCELLED;
+            return MessageApplication.DELETECLIENT;
         } catch (IllegalArgumentException e) {
             return MessageApplication.ACCOUNTNOTFOUND;
         } catch (Exception e) {

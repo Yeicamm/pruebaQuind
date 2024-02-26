@@ -2,6 +2,7 @@ package com.technical.test.quind.hexagonal.infrastructure.adapter.entity;
 
 import com.technical.test.quind.hexagonal.domain.model.enums.IdentificationTypeEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class ClientEntity extends Audit{
     private String clientName;
     @Column(name = "client_surname")
     private String clientSurname;
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,6}$", message = "The format of email no is valid")
     @Column(name = "client_email")
     private String clientEmail;
     @Column(name = "date_of_birth")
