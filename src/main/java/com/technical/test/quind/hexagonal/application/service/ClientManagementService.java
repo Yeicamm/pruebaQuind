@@ -21,32 +21,38 @@ public class ClientManagementService implements ClientService {
     private final ClientRepository clientRepository;
     @Override
     public Object createClient(ClientDto clientDto) {
-        if (EmailValidator.isValidEmail(clientDto.getClientEmail())){
-            Boolean ageValid = validateAgeClient(clientDto.getDateOfBirth());
-            if (!ageValid) {
-                return MessageApplication.NOMINORS;
-            }else {
-                clientDto.setDateCreated(LocalDateTime.now());
-                clientDto.setDateModified(null);
-                ClientEntity saveInformation = ClientMapper.dtoToClientEntity(clientDto);
-                clientRepository.save(saveInformation);
-                return MessageApplication.ACCOUNTCREATED;
+        if (!(isInvalidUseName(clientDto) || isInvalidUseSurname(clientDto))){
+            if (EmailValidator.isValidEmail(clientDto.getClientEmail())){
+                Boolean ageValid = validateAgeClient(clientDto.getDateOfBirth());
+                if (!ageValid) {
+                    return MessageApplication.NOMINORS;
+                }else {
+                    clientDto.setDateCreated(LocalDateTime.now());
+                    clientDto.setDateModified(null);
+                    ClientEntity saveInformation = ClientMapper.dtoToClientEntity(clientDto);
+                    clientRepository.save(saveInformation);
+                    return MessageApplication.ACCOUNTCREATED;
+                }
             }
+            return MessageApplication.STRUCTURE_EMAIL;
         }
-        return MessageApplication.STRUCTURE_EMAIL;
+        return MessageApplication.LENGTH_NAME_SURNAME;
     }
     @Override
     public Object updateClient(String identificationNumber, ClientDto clientDto) {
-        if (EmailValidator.isValidEmail(clientDto.getClientEmail())){
-            if (!(clientDto.getDateOfBirth().isEmpty())){
-                Boolean ageValid = validateAgeClient(clientDto.getDateOfBirth());
-                if (!ageValid){
-                    return MessageApplication.NOMINORS;
+        if (!(isInvalidUseName(clientDto) || isInvalidUseSurname(clientDto))){
+            if (EmailValidator.isValidEmail(clientDto.getClientEmail())){
+                if (!(clientDto.getDateOfBirth().isEmpty())){
+                    Boolean ageValid = validateAgeClient(clientDto.getDateOfBirth());
+                    if (!ageValid){
+                        return MessageApplication.NOMINORS;
+                    }
                 }
+                return MessageApplication.CLIENT_UPDATE;
             }
-            return MessageApplication.CLIENT_UPDATE;
+            return MessageApplication.STRUCTURE_EMAIL;
         }
-       return MessageApplication.STRUCTURE_EMAIL;
+        return MessageApplication.LENGTH_NAME_SURNAME;
     }
     @Override
     public String deleteClient(String identificationNumber) {
@@ -81,5 +87,11 @@ public class ClientManagementService implements ClientService {
             return clientRepository.save(existingClientEntity.get());
         }
         return MessageApplication.NULL;
+    }
+    public boolean isInvalidUseName(ClientDto clientDto){
+        return clientDto.getClientName() == null || clientDto.getClientName().length() < 2;
+    }
+    public boolean isInvalidUseSurname(ClientDto clientDto){
+        return clientDto.getClientSurname() == null || clientDto.getClientSurname().length() < 2;
     }
 }

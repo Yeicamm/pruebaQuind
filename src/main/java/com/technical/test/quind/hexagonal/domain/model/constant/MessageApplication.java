@@ -22,5 +22,6 @@ public class MessageApplication {
     public static String ACCOUNTMUSTHAVEZERO = "The account must have 0 in the balance";
     public static String CLIENT_UPDATE = "The client was successfully upgraded";
     public static String STRUCTURE_EMAIL = "The structure of the email should be xxxx@xxxxx.xxx";
+    public static String LENGTH_NAME_SURNAME = "The size of the name and surname must be greater than 2 and must not be null";
 
 }
