@@ -55,13 +55,14 @@ public class ProductManagementService implements ProductService {
         var balanceCompare = 0;
         Optional<ProductEntity> productEntity = productRepository.findProductEntityByAccountNumber(editAccountStatusDto.getAccountNumber());
         if (productEntity.isPresent()) {
-            if (productEntity.get().getBalance().compareTo(BigDecimal.ZERO) == balanceCompare) {
+            if (productEntity.get().getBalance().equals(BigDecimal.ZERO)) {
                 productEntity.get().setAccountState(AccountState.CANCELLED);
                 productEntity.get().setDateModified(LocalDateTime.now());
                 productRepository.save(productEntity.get());
                 return MessageApplication.ACCOUNTCANCELLED;
+            }else {
+                return MessageApplication.ACCOUNTMUSTHAVEZERO;
             }
-            return MessageApplication.ACCOUNTCANCELLED;
         }
         return MessageApplication.ACCOUNTNOTFOUND;
     }

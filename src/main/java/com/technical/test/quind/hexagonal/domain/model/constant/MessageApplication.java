@@ -19,5 +19,6 @@ public class MessageApplication {
     public static String WITHDRAWSUCCESSFULL = "withdraw successfull";
     public static String CONSIGNSUCESSFULL = "consign successfull";
     public static String TRANSFERSUCCESFULL = "Transfer successfull";
+    public static String ACCOUNTMUSTHAVEZERO = "The account must have 0 in the balance";
 
 }

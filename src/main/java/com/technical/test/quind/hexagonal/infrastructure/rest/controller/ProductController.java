@@ -17,57 +17,28 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/createAccount")
-    public String createAccount(@RequestBody ProductDto productDto) {
-        try {
-            productService.accountCreate(productDto);
-            return MessageApplication.ACCOUNTCREATED;
-        } catch (Exception e) {
-            return MessageApplication.ACCOUNTCANCELLED;
-        }
+    public Object createAccount(@RequestBody ProductDto productDto) {
+        return productService.accountCreate(productDto);
     }
 
     @PatchMapping("/updateAccountState")
-    public String updateAccountState(@RequestBody EditAccountStatusDto editAccountStatusDto) {
-        try {
-            productService.accountStateUpdate(editAccountStatusDto);
-            return MessageApplication.UPDATEACCOUNTS;
-        } catch (Exception e) {
-            return MessageApplication.ACCOUNTNOTFOUND;
-        }
+    public Object updateAccountState(@RequestBody EditAccountStatusDto editAccountStatusDto) {
+        return productService.accountStateUpdate(editAccountStatusDto);
     }
 
     @PatchMapping("/accountCanceled")
-    public String accountCanceled(@RequestBody EditAccountStatusDto editAccountStatusDto) {
-        try {
-            productService.accountCanceled(editAccountStatusDto);
-            return MessageApplication.ACCOUNTCANCELLED;
-        } catch (Exception e) {
-            return MessageApplication.ACCOUNTCANCELLED;
-        }
+    public Object accountCanceled(@RequestBody EditAccountStatusDto editAccountStatusDto) {
+        return productService.accountCanceled(editAccountStatusDto);
     }
 
     @PostMapping("/consign/{accountNumber}")
-    public String consign(@PathVariable String accountNumber, @RequestParam BigDecimal balance) {
-        try {
-            productService.consignMoney(accountNumber, balance);
-            return MessageApplication.CONSIGNSUCESSFULL;
-        } catch (IllegalArgumentException e) {
-            return MessageApplication.ACCOUNTNOTFOUND;
-        } catch (Exception e) {
-            return MessageApplication.ACCOUNTCANCELLED;
-        }
+    public Object consign(@PathVariable String accountNumber, @RequestParam BigDecimal balance) {
+        return productService.consignMoney(accountNumber, balance);
     }
 
     @PostMapping("/withdraw/{accountNumber}")
-    public String withdrawMoney(@PathVariable String accountNumber, @RequestParam BigDecimal balance) {
-        try {
-            productService.withdrawMoney(accountNumber, balance);
-            return MessageApplication.WITHDRAWSUCCESSFULL;
-        } catch (IllegalArgumentException e) {
-            return MessageApplication.ACCOUNTNOTFOUND;
-        } catch (Exception e) {
-            return MessageApplication.ACCOUNTCANCELLED;
-        }
+    public Object withdrawMoney(@PathVariable String accountNumber, @RequestParam BigDecimal balance) {
+        return productService.withdrawMoney(accountNumber, balance);
     }
 
     @PostMapping("/transfer")

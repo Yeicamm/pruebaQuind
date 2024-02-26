@@ -33,13 +33,6 @@ public class ClientController {
 
     @DeleteMapping("/delete/{identificationNumber}")
     public String deleteClient(@PathVariable String identificationNumber){
-        try {
-            clientService.deleteClient(identificationNumber);
-            return MessageApplication.DELETECLIENT;
-        } catch (IllegalArgumentException e) {
-            return MessageApplication.ACCOUNTNOTFOUND;
-        } catch (Exception e) {
-            return MessageApplication.ACCOUNTCANCELLED;
-        }
+        return clientService.deleteClient(identificationNumber);
     }
 }
