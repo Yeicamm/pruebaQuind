@@ -7,6 +7,7 @@ import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ProductE
 public class ProductMapper {
     public static ProductEntity dtoToProductEntity(ProductDto productDto) {
         ProductEntity productEntity = new ProductEntity();
+        productEntity.setAccountType(productDto.getAccountTypes());
         productEntity.setAccountState(productDto.getAccountState());
         productEntity.setBalance(productDto.getBalance());
         productEntity.setAccountNumber(productDto.getAccountNumber());
