@@ -22,16 +22,16 @@ public class AccountManagementService {
     public Object createSavingsAccount(ProductDto productDto) {
         int balance = 0;
         if (productDto.getBalance().compareTo(BigDecimal.ZERO) < balance) {
-            return MessageApplication.BALANCECANNOT;
+            return MessageApplication.BALANCE_CANNOT;
         }
         saveSavingsProductRepository(productDto);
 
-        return MessageApplication.ACCOUNTCREATED;
+        return MessageApplication.ACCOUNT_CREATED;
     }
 
     public Object createCurrentAccount(ProductDto productDto) {
         saveCurrentProductRepository(productDto);
-        return MessageApplication.ACCOUNTCREATED;
+        return MessageApplication.ACCOUNT_CREATED;
     }
 
     public String generateNumberAccountRandom(String prefix) {

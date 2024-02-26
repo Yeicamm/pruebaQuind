@@ -52,16 +52,16 @@ public class ProductManagementService implements ProductService {
                 productEntity.get().setAccountState(editAccountStatusDto.getAccountState());
                 productEntity.get().setDateModified(LocalDateTime.now());
                 productRepository.save(productEntity.get());
-                return MessageApplication.UPDATEACCOUNTS;
+                return MessageApplication.UPDATE_ACCOUNTS;
             } else if (editAccountStatusDto.getAccountState() == AccountState.ACTIVE || editAccountStatusDto.getAccountState() == AccountState.INACTIVE) {
                 productEntity.get().setAccountState(editAccountStatusDto.getAccountState());
                 productEntity.get().setDateModified(LocalDateTime.now());
                 productRepository.save(productEntity.get());
-                return MessageApplication.UPDATEACCOUNTS;
+                return MessageApplication.UPDATE_ACCOUNTS;
             }
             return MessageApplication.VALUE_BALANCE_ZERO;
         }
-        return MessageApplication.ACCOUNTNOTFOUND;
+        return MessageApplication.ACCOUNT_NOTFOUND;
     }
 
     @Override
@@ -72,23 +72,23 @@ public class ProductManagementService implements ProductService {
                 productEntity.get().setAccountState(AccountState.CANCELLED);
                 productEntity.get().setDateModified(LocalDateTime.now());
                 productRepository.save(productEntity.get());
-                return MessageApplication.ACCOUNTCANCELLED;
+                return MessageApplication.ACCOUNT_CANCELLED;
             } else {
-                return MessageApplication.ACCOUNTMUSTHAVEZERO;
+                return MessageApplication.ACCOUNT_MUST_HAVE_ZERO;
             }
         }
-        return MessageApplication.ACCOUNTNOTFOUND;
+        return MessageApplication.ACCOUNT_NOTFOUND;
     }
 
     @Override
     public Object consignMoney(String accountNumber, BigDecimal balance) {
         var balanceCompare = 0;
         if (balance.compareTo(BigDecimal.ZERO) <= balanceCompare) {
-            return MessageApplication.AMOUNTNOTNEGATIVE;
+            return MessageApplication.AMOUNT_NOT_NEGATIVE;
         }
         Optional<ProductEntity> productEntity = productRepository.findProductEntityByAccountNumber(accountNumber);
         if (productEntity.isEmpty()) {
-            return MessageApplication.ACCOUNTNOTFOUND;
+            return MessageApplication.ACCOUNT_NOTFOUND;
         }
         productEntity.get().setBalance(productEntity.get().getBalance().add(balance));
         productEntity.get().setDateModified(LocalDateTime.now());
@@ -101,14 +101,14 @@ public class ProductManagementService implements ProductService {
         Optional<ProductEntity> productEntity = productRepository.findProductEntityByAccountNumber(accountNumber);
 
         if (productEntity.isEmpty()) {
-            return MessageApplication.ACCOUNTNOTFOUND;
+            return MessageApplication.ACCOUNT_NOTFOUND;
         }
         if (productEntity.get().getBalance().compareTo(balance) >= 0) {
             productEntity.get().setBalance(productEntity.get().getBalance().subtract(balance));
             productEntity.get().setDateModified(LocalDateTime.now());
             return productRepository.save(productEntity.get());
         } else {
-            return MessageApplication.INSUFFICIENTBALANCE;
+            return MessageApplication.INSUFFICIENT_BALANCE;
         }
     }
 
@@ -117,7 +117,7 @@ public class ProductManagementService implements ProductService {
         if (productRepository.existsByAccountNumber(accountDestination)){
             withdrawMoney(accountOrigin, balance);
             consignMoney(accountDestination, balance);
-            return MessageApplication.TRANSFERSUCCESFULL;
+            return MessageApplication.TRANSFER_SUCCESSFUL;
         }return MessageApplication.VALUE_NUMBER_DESTINATION_EXIST;
     }
 }

@@ -25,13 +25,13 @@ public class ClientManagementService implements ClientService {
             if (EmailValidator.isValidEmail(clientDto.getClientEmail())){
                 Boolean ageValid = validateAgeClient(clientDto.getDateOfBirth());
                 if (!ageValid) {
-                    return MessageApplication.NOMINORS;
+                    return MessageApplication.NO_MINORS;
                 }else {
                     clientDto.setDateCreated(LocalDateTime.now());
                     clientDto.setDateModified(null);
                     ClientEntity saveInformation = ClientMapper.dtoToClientEntity(clientDto);
                     clientRepository.save(saveInformation);
-                    return MessageApplication.ACCOUNTCREATED;
+                    return MessageApplication.ACCOUNT_CREATED;
                 }
             }
             return MessageApplication.STRUCTURE_EMAIL;
@@ -45,7 +45,7 @@ public class ClientManagementService implements ClientService {
                 if (!(clientDto.getDateOfBirth().isEmpty())){
                     Boolean ageValid = validateAgeClient(clientDto.getDateOfBirth());
                     if (!ageValid){
-                        return MessageApplication.NOMINORS;
+                        return MessageApplication.NO_MINORS;
                     }
                 }
                 return MessageApplication.CLIENT_UPDATE;
@@ -60,11 +60,11 @@ public class ClientManagementService implements ClientService {
         if (clientEntity.isPresent()) {
             if (clientEntity.get().getProductEntities().isEmpty()) {
                 clientRepository.deleteById(clientEntity.get().getId());
-                return MessageApplication.DELETECLIENT;
+                return MessageApplication.DELETE_CLIENT;
             }
-            return MessageApplication.DELETECLIENTERROR;
+            return MessageApplication.DELETE_CLIENT_ERROR;
         }
-        return MessageApplication.CLIENTNOTFOUND;
+        return MessageApplication.CLIENT_NOTFOUND;
     }
     private Boolean validateAgeClient(String dateOfBirth) {
         LocalDate dateNac = LocalDate.parse(dateOfBirth);
@@ -73,20 +73,6 @@ public class ClientManagementService implements ClientService {
         var age = period.getYears();
         var ageMinimum = 18;
         return age >= ageMinimum;
-    }
-    public Object getFindClientEntity(ClientDto clientDto){
-        Optional<ClientEntity> existingClientEntity = clientRepository.findClientEntityByIdentificationNumber(clientDto.getIdentificationNumber());
-        if (existingClientEntity.isPresent()){
-            existingClientEntity.get().setIdentificationTypeEnum(clientDto.getIdentificationTypeEnum());
-            existingClientEntity.get().setIdentificationNumber(clientDto.getIdentificationNumber());
-            existingClientEntity.get().setClientName(clientDto.getClientName());
-            existingClientEntity.get().setClientSurname(clientDto.getClientSurname());
-            existingClientEntity.get().setClientEmail(clientDto.getClientEmail());
-            existingClientEntity.get().setDateOfBirth(clientDto.getDateOfBirth());
-            existingClientEntity.get().setDateModified(LocalDateTime.now());
-            return clientRepository.save(existingClientEntity.get());
-        }
-        return MessageApplication.NULL;
     }
     public boolean isInvalidUseName(ClientDto clientDto){
         return clientDto.getClientName() == null || clientDto.getClientName().length() < 2;
