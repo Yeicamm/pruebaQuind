@@ -1,7 +1,6 @@
 package com.technical.test.quind.hexagonal.infrastructure.rest.controller;
 
 import com.technical.test.quind.hexagonal.application.usecases.ProductService;
-import com.technical.test.quind.hexagonal.domain.model.constant.MessageApplication;
 import com.technical.test.quind.hexagonal.domain.model.dto.EditAccountStatusDto;
 import com.technical.test.quind.hexagonal.domain.model.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
@@ -42,14 +41,7 @@ public class ProductController {
     }
 
     @PostMapping("/transfer")
-    public String transferMoney(@RequestParam String accountOrigin, @RequestParam String accountDestination, @RequestParam BigDecimal balance) {
-        try {
-            productService.transferMoney(accountOrigin, accountDestination, balance);
-            return MessageApplication.TRANSFERSUCCESFULL;
-        } catch (IllegalArgumentException e) {
-            return MessageApplication.ACCOUNTNOTFOUND;
-        } catch (Exception e) {
-            return MessageApplication.ACCOUNTCANCELLED;
-        }
+    public Object transferMoney(@RequestParam String accountOrigin, @RequestParam String accountDestination, @RequestParam BigDecimal balance) {
+        return productService.transferMoney(accountOrigin,accountDestination,balance);
     }
 }

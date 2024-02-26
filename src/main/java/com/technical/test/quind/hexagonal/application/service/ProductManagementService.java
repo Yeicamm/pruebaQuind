@@ -113,8 +113,11 @@ public class ProductManagementService implements ProductService {
     }
 
     @Override
-    public void transferMoney(String accountOrigin, String accountDestination, BigDecimal balance) {
-        withdrawMoney(accountOrigin, balance);
-        consignMoney(accountDestination, balance);
+    public Object transferMoney(String accountOrigin, String accountDestination, BigDecimal balance) {
+        if (productRepository.existsByAccountNumber(accountDestination)){
+            withdrawMoney(accountOrigin, balance);
+            consignMoney(accountDestination, balance);
+            return MessageApplication.TRANSFERSUCCESFULL;
+        }return MessageApplication.VALUE_NUMBER_DESTINATION_EXIST;
     }
 }

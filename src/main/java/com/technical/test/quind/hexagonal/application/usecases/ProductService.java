@@ -11,5 +11,5 @@ public interface ProductService {
     Object accountCanceled(EditAccountStatusDto editAccountStatusDto);
     Object consignMoney(String accountNumber, BigDecimal balance);
     Object withdrawMoney(String accountNumber, BigDecimal balance);
-    void transferMoney(String accountOrigin, String accountDestination, BigDecimal balance);
+    Object transferMoney(String accountOrigin, String accountDestination, BigDecimal balance);
 }
