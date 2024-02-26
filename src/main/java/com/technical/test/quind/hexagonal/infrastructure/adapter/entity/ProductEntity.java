@@ -27,8 +27,6 @@ public class ProductEntity extends Audit{
     private BigDecimal balance;
     @Column(name = "GMF_exempt")
     private boolean gmfExempt;
-    @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AccountEntity> account;
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     private ClientEntity clientEntity;

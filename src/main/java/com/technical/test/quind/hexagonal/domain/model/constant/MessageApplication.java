@@ -15,8 +15,10 @@ public class MessageApplication {
     public static String UPDATEACCOUNTS = "Account status updated successfully";
     public static String AMOUNTNOTNEGATIVE = "The amount cannot be negative";
     public static String INSUFFICIENTBALANCE = "Insufficient balance to make the withdrawal";
-    public static String CANNOTWITHDRAWN = "You can't get it";
-    public static String SIMULATED = "Simulated Error";
     public static String NULL = "The value received is null";
+
+    public static String WITHDRAWSUCCESSFULL = "withdraw successfull";
+    public static String CONSIGNSUCESSFULL = "consign successfull";
+    public static String TRANSFERSUCCESFULL = "Transfer successfull";
 
 }

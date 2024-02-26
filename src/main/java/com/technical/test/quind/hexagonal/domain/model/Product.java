@@ -1,7 +1,6 @@
 package com.technical.test.quind.hexagonal.domain.model;
 
 import com.technical.test.quind.hexagonal.domain.model.enums.AccountState;
-import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.AccountEntity;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.Audit;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ClientEntity;
 import lombok.Getter;
@@ -18,6 +17,5 @@ public class Product extends Audit {
     private AccountState accountState;
     private BigDecimal balance;
     private boolean gmfExempt;
-    private List<AccountEntity> account;
     private ClientEntity clientEntity;
 }

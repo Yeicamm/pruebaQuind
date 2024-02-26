@@ -2,11 +2,9 @@ package com.technical.test.quind.hexagonal.application.service;
 
 import com.technical.test.quind.hexagonal.application.mapper.ProductMapper;
 import com.technical.test.quind.hexagonal.domain.model.constant.MessageApplication;
-import com.technical.test.quind.hexagonal.domain.model.dto.request.RequestAccountClientDto;
+import com.technical.test.quind.hexagonal.domain.model.dto.ProductDto;
 import com.technical.test.quind.hexagonal.domain.model.enums.AccountState;
-import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.AccountEntity;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ProductEntity;
-import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.AccountRepository;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,21 +17,19 @@ import java.util.Random;
 @Service
 public class AccountManagementService {
     private final ProductRepository productRepository;
-    private final AccountRepository accountRepository;
 
-    public Object createSavingsAccount(RequestAccountClientDto requestAccountClientDto) {
+    public Object createSavingsAccount(ProductDto productDto) {
         int balance = 0;
-        if (requestAccountClientDto.getProductDto().getBalance().compareTo(BigDecimal.ZERO) < balance) {
+        if (productDto.getBalance().compareTo(BigDecimal.ZERO) < balance) {
             return MessageApplication.BALANCECANNOT;
         }
-        saveSavingsProductRepository(requestAccountClientDto);
-        saveAccountRepository(requestAccountClientDto);
+        saveSavingsProductRepository(productDto);
+
         return MessageApplication.ACCOUNTCREATED;
     }
 
-    public Object createCurrentAccount(RequestAccountClientDto requestAccountClientDto) {
-        saveCurrentProductRepository(requestAccountClientDto);
-        saveAccountRepository(requestAccountClientDto);
+    public Object createCurrentAccount(ProductDto productDto) {
+        saveCurrentProductRepository(productDto);
         return MessageApplication.ACCOUNTCREATED;
     }
 
@@ -47,18 +43,17 @@ public class AccountManagementService {
         return prefix + randomNumber;
     }
 
-    public void saveSavingsProductRepository(RequestAccountClientDto requestAccountClientDto) {
-        requestAccountClientDto.getProductDto().setAccountNumber(null);
-        requestAccountClientDto.getProductDto().setAccountNumber(generateNumberAccountRandom("53"));
-        requestAccountClientDto.getProductDto().setAccountState(AccountState.ACTIVE);
-        requestAccountClientDto.getProductDto().setDateCreated(LocalDateTime.now());
-
-        ProductEntity product = ProductMapper.dtoToProductEntity(requestAccountClientDto.getProductDto());
+    public void saveSavingsProductRepository(ProductDto productDto) {
+        ProductEntity product = ProductMapper.dtoToProductEntity(productDto);
+        productDto.setAccountNumber(null);
+        productDto.setAccountNumber(generateNumberAccountRandom("53"));
+        productDto.setAccountState(AccountState.ACTIVE);
+        productDto.setDateCreated(LocalDateTime.now());
         productRepository.save(product);
     }
 
-    public void saveCurrentProductRepository(RequestAccountClientDto requestAccountClientDto) {
-        requestAccountClientDto.getProductDto().setAccountNumber(null);
+    public void saveCurrentProductRepository(ProductDto productDto) {
+        productDto.setAccountNumber(null);
 
         requestAccountClientDto.getProductDto().setAccountNumber(generateNumberAccountRandom("33"));
         requestAccountClientDto.getProductDto().setAccountState(requestAccountClientDto.getProductDto().getAccountState());
@@ -68,11 +63,4 @@ public class AccountManagementService {
         productRepository.save(product);
     }
 
-    public void saveAccountRepository(RequestAccountClientDto requestAccountClientDto) {
-        ProductEntity product = ProductMapper.dtoToProductEntity(requestAccountClientDto.getProductDto());
-        AccountEntity accountEntity = new AccountEntity();
-        accountEntity.setAccountType(requestAccountClientDto.getAccountType());
-        accountEntity.setProductEntity(product);
-        accountRepository.save(accountEntity);
-    }
 }

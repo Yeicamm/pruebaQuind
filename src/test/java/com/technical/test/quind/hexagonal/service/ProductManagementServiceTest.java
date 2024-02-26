@@ -1,13 +1,10 @@
 package com.technical.test.quind.hexagonal.service;
 
-import com.technical.test.quind.hexagonal.application.mapper.ProductMapper;
 import com.technical.test.quind.hexagonal.application.service.AccountManagementService;
 import com.technical.test.quind.hexagonal.application.service.ProductManagementService;
 import com.technical.test.quind.hexagonal.domain.model.dto.EditAccountStatusDto;
 import com.technical.test.quind.hexagonal.domain.model.dto.ProductDto;
-import com.technical.test.quind.hexagonal.domain.model.dto.request.RequestAccountClientDto;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ProductEntity;
-import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.AccountRepository;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,9 +33,7 @@ public class ProductManagementServiceTest {
 
     @Test
     void cannotCreateAccountSavings(){
-        ProductDto productDto = new ProductDto();
-        RequestAccountClientDto requestAccountClientDto = RequestAccountClientDto.builder()
-                .productDto(productDto)
+        ProductDto requestAccountClientDto = ProductDto.builder()
                 .accountType("")
                 .build();
         productManagementService.accountCreate(requestAccountClientDto);
@@ -46,18 +41,14 @@ public class ProductManagementServiceTest {
     }
     @Test
     void createAccountSavings(){
-        ProductDto productDto = new ProductDto();
-        RequestAccountClientDto requestAccountClientDto = RequestAccountClientDto.builder()
-                .productDto(productDto)
+        ProductDto productDto = ProductDto.builder()
                 .accountType("SAVINGS")
                 .build();
-        productManagementService.accountCreate(requestAccountClientDto);
+        productManagementService.accountCreate(productDto);
     }
     @Test
     void createAccountCurrent(){
-        ProductDto productDto = new ProductDto();
-        RequestAccountClientDto requestAccountClientDto = RequestAccountClientDto.builder()
-                .productDto(productDto)
+        ProductDto requestAccountClientDto = ProductDto.builder()
                 .accountType("CURRENT")
                 .build();
         productManagementService.accountCreate(requestAccountClientDto);

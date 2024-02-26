@@ -3,7 +3,7 @@ package com.technical.test.quind.hexagonal.application.service;
 import com.technical.test.quind.hexagonal.application.usecases.ProductService;
 import com.technical.test.quind.hexagonal.domain.model.constant.MessageApplication;
 import com.technical.test.quind.hexagonal.domain.model.dto.EditAccountStatusDto;
-import com.technical.test.quind.hexagonal.domain.model.dto.request.RequestAccountClientDto;
+import com.technical.test.quind.hexagonal.domain.model.dto.ProductDto;
 import com.technical.test.quind.hexagonal.domain.model.enums.AccountState;
 import com.technical.test.quind.hexagonal.domain.model.enums.AccountType;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ProductEntity;
@@ -21,19 +21,19 @@ public class ProductManagementService implements ProductService {
     private final ProductRepository productRepository;
     private final AccountManagementService accountManagementService;
 
-    public Object accountCreate(RequestAccountClientDto requestAccountClientDto) {
-        requestAccountClientDto.getProductDto().setAccountNumber(null);
+    public Object accountCreate(ProductDto productDto) {
+        productDto.setAccountNumber(null);
         String accountNumber;
 
-        if (requestAccountClientDto.getAccountType().equals(AccountType.SAVINGS.name())) {
+        if (productDto.getAccountType().equals(AccountType.SAVINGS.name())) {
             accountNumber = accountManagementService.generateNumberAccountRandom("53");
-            requestAccountClientDto.getProductDto().setAccountNumber(accountNumber);
-            return accountManagementService.createSavingsAccount(requestAccountClientDto);
+            productDto.setAccountNumber(accountNumber);
+            return accountManagementService.createSavingsAccount(productDto);
 
-        } else if (requestAccountClientDto.getAccountType().equals(AccountType.CURRENT.name())) {
+        } else if (productDto.getAccountType().equals(AccountType.CURRENT.name())) {
             accountNumber = accountManagementService.generateNumberAccountRandom("33");
-            requestAccountClientDto.getProductDto().setAccountNumber(accountNumber);
-            return accountManagementService.createCurrentAccount(requestAccountClientDto);
+            productDto.setAccountNumber(accountNumber);
+            return accountManagementService.createCurrentAccount(productDto);
         }
         return MessageApplication.CANNOTCREATEDIFFERENTACCOUNT;
     }
@@ -101,6 +101,6 @@ public class ProductManagementService implements ProductService {
     @Override
     public void transferMoney(String accountOrigin, String accountDestination, BigDecimal balance) {
         withdrawMoney(accountOrigin, balance);
-        withdrawMoney(accountDestination, balance);
+        consignMoney(accountDestination, balance);
     }
 }
