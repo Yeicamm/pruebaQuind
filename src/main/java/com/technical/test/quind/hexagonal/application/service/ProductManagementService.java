@@ -83,13 +83,13 @@ public class ProductManagementService implements ProductService {
 
     @Override
     public Object withdrawMoney(String accountNumber, BigDecimal balance) {
-        var balanceCompare = 0;
+
         Optional<ProductEntity> productEntity = productRepository.findProductEntityByAccountNumber(accountNumber);
 
         if (productEntity.isEmpty()) {
             return MessageApplication.ACCOUNTNOTFOUND;
         }
-        if (productEntity.get().getBalance().compareTo(balance) >= balanceCompare) {
+        if (productEntity.get().getBalance().compareTo(balance) >= 0) {
             productEntity.get().setBalance(productEntity.get().getBalance().subtract(balance));
             productEntity.get().setDateModified(LocalDateTime.now());
             return productRepository.save(productEntity.get());

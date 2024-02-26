@@ -131,4 +131,30 @@ public class ProductManagementServiceTest {
         Mockito.when(productRepository.findProductEntityByAccountNumber(accountNumber)).thenReturn(Optional.of(product));
         productManagementService.consignMoney(accountNumber,balance);
     }
+    @Test
+    void WithdrawMoneyIsEmpty(){
+        ProductEntity product = new ProductEntity();
+        Mockito.when(productRepository.findProductEntityByAccountNumber(product.getAccountNumber())).thenReturn(Optional.empty());
+        productManagementService.withdrawMoney("",BigDecimal.valueOf(1));
+    }
+    @Test
+    void WithdrawMoneyCompareTo() {
+        ProductEntity product = new ProductEntity();
+        product.setAccountNumber("53");
+        product.setBalance(BigDecimal.valueOf(5000));
+        Mockito.when(productRepository.findProductEntityByAccountNumber("53")).thenReturn(Optional.of(product));
+        productManagementService.withdrawMoney("53",BigDecimal.valueOf(4000));
+    }
+    @Test
+    void WithdrawMoneyInsufficientBalance() {
+        ProductEntity product = new ProductEntity();
+        product.setAccountNumber("53");
+        product.setBalance(BigDecimal.valueOf(10));
+        Mockito.when(productRepository.findProductEntityByAccountNumber(product.getAccountNumber())).thenReturn(Optional.of(product));
+        productManagementService.withdrawMoney("53",BigDecimal.valueOf(4000));
+    }
+    @Test
+    void transferMoney(){
+        productManagementService.transferMoney("5300000","53102102",BigDecimal.valueOf(20000));
+    }
 }
