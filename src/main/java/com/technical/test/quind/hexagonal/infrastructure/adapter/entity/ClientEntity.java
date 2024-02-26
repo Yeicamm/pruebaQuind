@@ -1,6 +1,5 @@
 package com.technical.test.quind.hexagonal.infrastructure.adapter.entity;
 
-import com.technical.test.quind.hexagonal.domain.model.enums.IdentificationTypeEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
@@ -18,9 +17,8 @@ public class ClientEntity extends Audit{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Enumerated(EnumType.STRING)
     @Column(name = "identification_type")
-    private IdentificationTypeEnum identificationTypeEnum;
+    private String identificationTypeEnum;
     @Column(name = "identification_number")
     private String identificationNumber;
     @Column(name = "client_name")

@@ -5,7 +5,7 @@ import com.technical.test.quind.hexagonal.application.usecases.ClientService;
 import com.technical.test.quind.hexagonal.domain.model.constant.MessageApplication;
 import com.technical.test.quind.hexagonal.domain.model.dto.ClientDto;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ClientEntity;
-import com.technical.test.quind.hexagonal.infrastructure.adapter.exepcion.EmailValidator;
+import com.technical.test.quind.hexagonal.infrastructure.adapter.validation.EmailValidator;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

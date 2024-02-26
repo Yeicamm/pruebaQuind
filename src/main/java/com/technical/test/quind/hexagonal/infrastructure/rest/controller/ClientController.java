@@ -1,7 +1,6 @@
 package com.technical.test.quind.hexagonal.infrastructure.rest.controller;
 
 import com.technical.test.quind.hexagonal.application.usecases.ClientService;
-import com.technical.test.quind.hexagonal.domain.model.constant.MessageApplication;
 import com.technical.test.quind.hexagonal.domain.model.dto.ClientDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

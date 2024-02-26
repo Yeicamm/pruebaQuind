@@ -1,7 +1,6 @@
 package com.technical.test.quind.hexagonal.domain.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.technical.test.quind.hexagonal.domain.model.enums.IdentificationTypeEnum;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.Audit;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +12,7 @@ import java.util.List;
 @Setter
 @Builder
 public class ClientDto extends Audit {
-    private IdentificationTypeEnum identificationTypeEnum;
+    private String identificationTypeEnum;
     private String identificationNumber;
     private String clientName;
     private String clientSurname;

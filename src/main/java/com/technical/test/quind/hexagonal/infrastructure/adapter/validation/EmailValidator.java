@@ -1,4 +1,4 @@
-package com.technical.test.quind.hexagonal.infrastructure.adapter.exepcion;
+package com.technical.test.quind.hexagonal.infrastructure.adapter.validation;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
