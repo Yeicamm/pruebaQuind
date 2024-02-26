@@ -20,15 +20,8 @@ public class ClientController {
     }
 
     @PatchMapping("/update/{identificationNumber}")
-    public String updateClient(@PathVariable String identificationNumber, @RequestBody ClientDto clientDto){
-        try {
-            clientService.updateClient(identificationNumber, clientDto);
-            return MessageApplication.UPDATEACCOUNTS;
-        } catch (IllegalArgumentException e) {
-            return MessageApplication.ACCOUNTNOTFOUND;
-        } catch (Exception e) {
-            return MessageApplication.ACCOUNTCANCELLED;
-        }
+    public Object updateClient(@PathVariable String identificationNumber, @RequestBody ClientDto clientDto){
+        return clientService.updateClient(identificationNumber,clientDto);
     }
 
     @DeleteMapping("/delete/{identificationNumber}")

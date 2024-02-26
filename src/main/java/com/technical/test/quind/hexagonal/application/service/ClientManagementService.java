@@ -5,6 +5,7 @@ import com.technical.test.quind.hexagonal.application.usecases.ClientService;
 import com.technical.test.quind.hexagonal.domain.model.constant.MessageApplication;
 import com.technical.test.quind.hexagonal.domain.model.dto.ClientDto;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ClientEntity;
+import com.technical.test.quind.hexagonal.infrastructure.adapter.exepcion.EmailValidator;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,26 +21,32 @@ public class ClientManagementService implements ClientService {
     private final ClientRepository clientRepository;
     @Override
     public Object createClient(ClientDto clientDto) {
-        Boolean ageValid = validateAgeClient(clientDto.getDateOfBirth());
-        if (!ageValid) {
-            return MessageApplication.NOMINORS;
-        }else {
-            clientDto.setDateCreated(LocalDateTime.now());
-            clientDto.setDateModified(null);
-            ClientEntity saveInformation = ClientMapper.dtoToClientEntity(clientDto);
-            clientRepository.save(saveInformation);
-            return MessageApplication.ACCOUNTCREATED;
+        if (EmailValidator.isValidEmail(clientDto.getClientEmail())){
+            Boolean ageValid = validateAgeClient(clientDto.getDateOfBirth());
+            if (!ageValid) {
+                return MessageApplication.NOMINORS;
+            }else {
+                clientDto.setDateCreated(LocalDateTime.now());
+                clientDto.setDateModified(null);
+                ClientEntity saveInformation = ClientMapper.dtoToClientEntity(clientDto);
+                clientRepository.save(saveInformation);
+                return MessageApplication.ACCOUNTCREATED;
+            }
         }
+        return MessageApplication.STRUCTURE_EMAIL;
     }
     @Override
     public Object updateClient(String identificationNumber, ClientDto clientDto) {
-        if (!(clientDto.getDateOfBirth().isEmpty())){
-            Boolean ageValid = validateAgeClient(clientDto.getDateOfBirth());
-            if (!ageValid){
-                return MessageApplication.NOMINORS;
+        if (EmailValidator.isValidEmail(clientDto.getClientEmail())){
+            if (!(clientDto.getDateOfBirth().isEmpty())){
+                Boolean ageValid = validateAgeClient(clientDto.getDateOfBirth());
+                if (!ageValid){
+                    return MessageApplication.NOMINORS;
+                }
             }
+            return MessageApplication.CLIENT_UPDATE;
         }
-        return getFindClientEntity(clientDto);
+       return MessageApplication.STRUCTURE_EMAIL;
     }
     @Override
     public String deleteClient(String identificationNumber) {

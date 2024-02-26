@@ -20,5 +20,7 @@ public class MessageApplication {
     public static String CONSIGNSUCESSFULL = "consign successfull";
     public static String TRANSFERSUCCESFULL = "Transfer successfull";
     public static String ACCOUNTMUSTHAVEZERO = "The account must have 0 in the balance";
+    public static String CLIENT_UPDATE = "The client was successfully upgraded";
+    public static String STRUCTURE_EMAIL = "The structure of the email should be xxxx@xxxxx.xxx";
 
 }
