@@ -55,11 +55,11 @@ public class AccountManagementService {
     public void saveCurrentProductRepository(ProductDto productDto) {
         productDto.setAccountNumber(null);
 
-        requestAccountClientDto.getProductDto().setAccountNumber(generateNumberAccountRandom("33"));
-        requestAccountClientDto.getProductDto().setAccountState(requestAccountClientDto.getProductDto().getAccountState());
-        requestAccountClientDto.getProductDto().setDateCreated(LocalDateTime.now());
+        productDto.setAccountNumber(generateNumberAccountRandom("33"));
+        productDto.setAccountState(productDto.getAccountState());
+        productDto.setDateCreated(LocalDateTime.now());
 
-        ProductEntity product = ProductMapper.dtoToProductEntity(requestAccountClientDto.getProductDto());
+        ProductEntity product = ProductMapper.dtoToProductEntity(productDto);
         productRepository.save(product);
     }
 
