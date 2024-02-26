@@ -7,14 +7,14 @@ import com.technical.test.quind.hexagonal.domain.model.enums.AccountState;
 import com.technical.test.quind.hexagonal.domain.model.enums.AccountType;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.entity.ProductEntity;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.ProductRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Random;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Service
 public class AccountManagementService {
     private final ProductRepository productRepository;
@@ -40,6 +40,7 @@ public class AccountManagementService {
 
         while (productRepository.existsByAccountNumber(prefix + randomNumber)) {
             randomNumber = 10000000 + random.nextInt(90000000);
+            break;
         }
         return prefix + randomNumber;
     }

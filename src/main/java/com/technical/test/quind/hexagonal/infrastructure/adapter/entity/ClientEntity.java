@@ -26,7 +26,6 @@ public class ClientEntity extends Audit{
     @Column(name = "client_surname")
     private String clientSurname;
     @Column(name = "client_email")
-    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,6}$", message = "The format of email no is valid")
     private String clientEmail;
     @Column(name = "date_of_birth")
     private String dateOfBirth;

@@ -18,3 +18,5 @@ public class Client extends Audit {
     private String dateOfBirth;
     private List<ProductEntity> productEntities;
 }
+
+

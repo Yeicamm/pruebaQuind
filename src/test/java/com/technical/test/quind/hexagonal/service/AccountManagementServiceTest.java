@@ -2,34 +2,26 @@ package com.technical.test.quind.hexagonal.service;
 
 import com.technical.test.quind.hexagonal.application.service.AccountManagementService;
 import com.technical.test.quind.hexagonal.domain.model.dto.ProductDto;
-import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.ClientRepository;
 import com.technical.test.quind.hexagonal.infrastructure.adapter.repository.ProductRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.text.BreakIterator;
 
 import static org.mockito.ArgumentMatchers.any;
 
+@ExtendWith(MockitoExtension.class)
 public class AccountManagementServiceTest {
 
     @Mock
-    ProductRepository productRepository;
-    @Mock
-    ClientRepository clientRepository;
-
+    private ProductRepository productRepository;
     @InjectMocks
-    AccountManagementService accountManagementService;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
+    private AccountManagementService accountManagementService;
 
     @Test
     void createSavingsAccountNegative() {
@@ -59,7 +51,8 @@ public class AccountManagementServiceTest {
     }
     @Test
     void generateRandomNumberD() {
-        Mockito.when(productRepository.existsByAccountNumber("331000")).thenReturn(true);
-        accountManagementService.generateNumberAccountRandom("33"+"1000");
+        Mockito.when(productRepository.existsByAccountNumber(Mockito.any())).thenReturn(true);
+        accountManagementService.generateNumberAccountRandom("53");
+
     }
 }
