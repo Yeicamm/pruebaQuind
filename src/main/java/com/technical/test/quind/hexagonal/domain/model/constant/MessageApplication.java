@@ -7,6 +7,7 @@ public class MessageApplication {
     public static String LENGTH_NAME_SURNAME = "The size of the name and surname must be greater than 2 and must not be null";
     public static String VALIDATION_CLIENT_PRODUCT = "A client must exist in a database";
     public static String VALUE_ACCOUNT_GREATER_TO_ZERO = "Account balance must be greater than 0";
+    public static String VALUE_BALANCE_ZERO = "Account must have a balance of 0";
     public static String DELETECLIENTERROR = "You can't delete the customer because it has linked products";
     public static String DELETECLIENT = "Customer information successfully deleted";
     public static String CLIENTNOTFOUND = "Client to be deleted not found";

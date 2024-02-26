@@ -26,8 +26,8 @@ public class ProductManagementService implements ProductService {
     public Object accountCreate(ProductDto productDto) {
         productDto.setAccountNumber(null);
         String accountNumber;
-        if (productDto.getBalance().compareTo(BigDecimal.ZERO) >= 0){
-            if (clientRepository.existsById(productDto.getClientId())){
+        if (productDto.getBalance().compareTo(BigDecimal.ZERO) >= 0) {
+            if (clientRepository.existsById(productDto.getClientId())) {
                 if (productDto.getAccountType().equals(AccountType.SAVINGS.name())) {
                     accountNumber = accountManagementService.generateNumberAccountRandom("53");
                     productDto.setAccountNumber(accountNumber);
@@ -48,10 +48,18 @@ public class ProductManagementService implements ProductService {
     public Object accountStateUpdate(EditAccountStatusDto editAccountStatusDto) {
         Optional<ProductEntity> productEntity = productRepository.findProductEntityByAccountNumber(editAccountStatusDto.getAccountNumber());
         if (productEntity.isPresent()) {
-            productEntity.get().setAccountState(editAccountStatusDto.getAccountState());
-            productEntity.get().setDateModified(LocalDateTime.now());
-            productRepository.save(productEntity.get());
-            return MessageApplication.UPDATEACCOUNTS;
+            if (productEntity.get().getBalance().compareTo(BigDecimal.ZERO) == 0 && editAccountStatusDto.getAccountState() == AccountState.CANCELLED) {
+                productEntity.get().setAccountState(editAccountStatusDto.getAccountState());
+                productEntity.get().setDateModified(LocalDateTime.now());
+                productRepository.save(productEntity.get());
+                return MessageApplication.UPDATEACCOUNTS;
+            } else if (editAccountStatusDto.getAccountState() == AccountState.ACTIVE || editAccountStatusDto.getAccountState() == AccountState.INACTIVE) {
+                productEntity.get().setAccountState(editAccountStatusDto.getAccountState());
+                productEntity.get().setDateModified(LocalDateTime.now());
+                productRepository.save(productEntity.get());
+                return MessageApplication.UPDATEACCOUNTS;
+            }
+            return MessageApplication.VALUE_BALANCE_ZERO;
         }
         return MessageApplication.ACCOUNTNOTFOUND;
     }
@@ -65,7 +73,7 @@ public class ProductManagementService implements ProductService {
                 productEntity.get().setDateModified(LocalDateTime.now());
                 productRepository.save(productEntity.get());
                 return MessageApplication.ACCOUNTCANCELLED;
-            }else {
+            } else {
                 return MessageApplication.ACCOUNTMUSTHAVEZERO;
             }
         }
